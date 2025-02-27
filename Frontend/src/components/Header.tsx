@@ -19,10 +19,7 @@ const Header: React.FC = () => {
                     </nav>
 
                     <div className="hidden md:block">
-                        <a className="mr-2 bg-black text-white px-6 py-2 rounded hover:bg-gold-600 transition-colors">
-                            Réserver
-                        </a>
-                        <a className="bg-black text-white px-6 py-2 rounded hover:bg-gold-600 transition-colors">
+                        <a className="header-button px-6 py-2 rounded hover:bg-gold-600 transition-colors">
                             Connexion
                         </a>
                     </div>

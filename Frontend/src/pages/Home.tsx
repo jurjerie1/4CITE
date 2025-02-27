@@ -75,9 +75,9 @@ const Home = () => {
                                 <div className="text-center text-black px-4">
                                     <h1 className="text-5xl font-light mb-2">{slide.title}</h1>
                                     <p className="text-xl mb-8">{slide.description}</p>
-                                    <button className="bg-white text-white px-8 py-3 rounded-sm hover:bg-gold-500 hover:text-white transition-colors">
-                                        Découvrir
-                                    </button>
+                                    <a href="#reservation" className="header-button px-8 py-3 rounded-sm hover:bg-gold-500 hover:text-white transition-colors">
+                                        Réserver
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -95,7 +95,7 @@ const Home = () => {
                     </div>
                 </div>
                 <div className="relative mx-auto -mt-16 max-w-4xl px-4">
-                    <div className="bg-white rounded-lg shadow-xl p-6">
+                    <div id="reservation" className="bg-white rounded-lg shadow-xl p-6">
                         <h2 className="text-2xl font-light text-center mb-6">Réservez votre séjour</h2>
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div>
