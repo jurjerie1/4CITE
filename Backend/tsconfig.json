@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",  // Ajoute cette ligne ou assure-toi qu'elle est bien définie
-    "resolveJsonModule": true,   // Permet d'importer des fichiers JSON si besoin
-    "baseUrl": "./",             // Assure une bonne résolution des modules
-    "paths": {                   // Facultatif : si tu as des alias de modules
+    "moduleResolution": "node",  
+    "resolveJsonModule": true,   
+    "baseUrl": "./",             
+    "paths": {                   
       "@/*": ["src/*"]
     },
     "esModuleInterop": true, 
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "module": "ESNext",
   }
 }

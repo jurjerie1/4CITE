@@ -5,7 +5,7 @@ describe("User API", () => {
        // Test de création /register
     it("should register user", async () => {
         const res = await request(app)
-            .post("users/register")
+            .post("api/users/register")
             .send({
                 email: "newuser@example.com",  
                 password: "secret",
