@@ -6,8 +6,23 @@ import bcrypt from "bcrypt";
 const userRepository = new UserRepository(User);
 
 export const Login = async (req: Request, res: Response) : Promise<void> => {
-    const { email, password } = req.body;
+    try {
+        const { email, password } = req.body;
+        const user = await userRepository.findUserByEmailAndPassword(email, password);
+        if (!user) {
+            res.status(401).json({ message: 'Invalid email or password' });
+            return;
+        }
+        
+        const token = "";
+        user.password = "";
+        res.status(200).json({message: "Utilisateur connecté avec succès", user, token });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 }
+
 
 
 
@@ -29,7 +44,10 @@ export const Register = async (req: Request, res: Response): Promise<void> => {
         user.role = 0;
         const newUser: IUser = await userRepository.createUser(user);
 
-        res.status(201).json({ message: "Utilisateur créé avec succès", user });
+        const token = "";
+        user.password = "";
+        res.status(200).json({message: "Utilisateur créé avec succès", user, token });
+
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
