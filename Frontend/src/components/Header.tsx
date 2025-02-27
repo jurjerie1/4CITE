@@ -13,13 +13,13 @@ const Header: React.FC = () => {
                     </div>
 
                     <nav className="hidden md:flex space-x-10">
-                        <a href="#" className="font-medium hover:text-gold-500 transition-colors">Accueil</a>
+                        <a href="/" className="font-medium hover:text-gold-500 transition-colors">Accueil</a>
                         <a href="#" className="font-medium hover:text-gold-500 transition-colors">Réservations</a>
                         <a href="#" className="font-medium hover:text-gold-500 transition-colors">Contact</a>
                     </nav>
 
                     <div className="hidden md:block">
-                        <a className="header-button px-6 py-2 rounded hover:bg-gold-600 transition-colors">
+                        <a href="/login" className="header-button px-6 py-2 rounded hover:bg-gold-600 transition-colors">
                             Connexion
                         </a>
                     </div>
