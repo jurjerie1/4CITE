@@ -9,6 +9,16 @@ import bcrypt from "bcrypt";
         this.model = model;
     }
 
+    async findUserByEmailAndPassword(email: string, password: string): Promise<IUser | null> {
+        const user = await this.model.findOne({ email });
+
+        if (user && (await bcrypt.compare(password, String(user.password)))) {
+            return user;
+        }
+
+        return null;
+    }
+    
     createUser(user: IUser): Promise<IUser> {
         return this.model.create(user);
     }
