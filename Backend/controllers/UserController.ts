@@ -70,7 +70,7 @@ export const UpdateUser = async (req: CustomRequest, res: Response): Promise<voi
         res.status(404).json({ error: 'Utilisateur non trouvé' });
         return
     }
-    
+
     if (req.userData && req.userData.role === "0" && id !== req.userData.userId) {
         res.status(403).json({ error: 'Accès refusé' });
         return;
@@ -100,6 +100,24 @@ export const UpdateUser = async (req: CustomRequest, res: Response): Promise<voi
 export const GetAllUsers = async (req: Request, res: Response): Promise<void> => {
     try {
         const users = await userRepository.getAllUsers();
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message : 'Erreur serveur' });
+    }
+};
+
+export const GetUserById = async (req: CustomRequest, res: Response): Promise<void> => {
+    let id = req.params.id || req.userData.userId;
+    if (req.userData && req.userData.role > "1" && req.params.id !== undefined) {
+        id = req.params.id;
+    } else if (req.userData.userId == id) {
+        id = req.userData.userId;
+    } else {
+        res.status(403).json({ error: 'Accès refusé' });
+        return;
+    }
+    try {
+        const users = await userRepository.getUserById(id);
         res.json(users);
     } catch (error) {
         res.status(500).json({ error: error instanceof Error ? error.message : 'Erreur serveur' });
