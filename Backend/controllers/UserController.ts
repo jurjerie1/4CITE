@@ -13,7 +13,7 @@ export const Login = async (req: Request, res: Response) : Promise<void> => {
             res.status(401).json({ message: 'Invalid email or password' });
             return;
         }
-        
+
         const token = "";
         user.password = "";
         res.status(200).json({message: "Utilisateur connecté avec succès", user, token });
@@ -22,9 +22,6 @@ export const Login = async (req: Request, res: Response) : Promise<void> => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
-
-
-
 
 export const Register = async (req: Request, res: Response): Promise<void> => {
     try {
