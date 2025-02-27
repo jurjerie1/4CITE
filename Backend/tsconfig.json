@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",  
+    "resolveJsonModule": true,   
+    "baseUrl": "./",             
+    "paths": {                   
+      "@/*": ["src/*"]
+    },
+    "esModuleInterop": true, 
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "module": "ESNext",
+  }
+}
