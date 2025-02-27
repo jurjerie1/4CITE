@@ -36,5 +36,24 @@ describe("User API", () => {
             });
         expect(res.statusCode).toEqual(400);
     });
-    
+    // test le mot de passe est vide    
+    it("should not register user with empty password", async () => {
+        const res = await request(app)
+            .post("/api/users/register")
+            .send({
+                email: "newuser@example.com",  
+                pseudo: "newuser",
+            });
+        expect(res.statusCode).toEqual(400);
+    });
+    // test le pseudo est vide
+    it("should not register user with empty pseudo", async () => {
+        const res = await request(app)
+            .post("/api/users/register")
+            .send({
+                email: "newuser@example.com",  
+                password: "secret",
+            });
+        expect(res.statusCode).toEqual(400);
+    });
 }); // Fermeture correcte du describe
