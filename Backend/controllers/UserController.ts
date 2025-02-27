@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { IUser, User } from '../models/user.js';
 import UserRepository from '../repositories/userRepository.js';
+import { generateToken } from '../utils/tools.js';
 import bcrypt from "bcrypt";
 
 const userRepository = new UserRepository(User);
@@ -14,7 +15,7 @@ export const Login = async (req: Request, res: Response) : Promise<void> => {
             return;
         }
 
-        const token = "";
+        const token: string = generateToken(user);
         user.password = "";
         res.status(200).json({message: "Utilisateur connecté avec succès", user, token });
     } catch (error) {
@@ -39,9 +40,10 @@ export const Register = async (req: Request, res: Response): Promise<void> => {
         user.role = 0;
         const newUser: IUser = await userRepository.createUser(user);
 
-        const token = "";
-        user.password = "";
-        res.status(200).json({message: "Utilisateur créé avec succès", user, token });
+        const token: string = generateToken(newUser);
+
+        newUser.password = "";
+        res.status(200).json({message: "Utilisateur créé avec succès", user: newUser, token });
 
     } catch (error) {
         res.status(500).json({ error: 'Erreur serveur' });
