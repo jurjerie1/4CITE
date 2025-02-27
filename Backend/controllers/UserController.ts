@@ -96,3 +96,12 @@ export const UpdateUser = async (req: CustomRequest, res: Response): Promise<voi
         res.status(500).json({ error: error instanceof Error ? error.message : 'Erreur serveur' });
     }
 };
+
+export const GetAllUsers = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const users = await userRepository.getAllUsers();
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message : 'Erreur serveur' });
+    }
+};

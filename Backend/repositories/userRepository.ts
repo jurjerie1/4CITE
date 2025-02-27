@@ -34,6 +34,9 @@ import bcrypt from "bcrypt";
     async getUserById(id: string): Promise<IUser | null> {
         return await this.model.findById(id, "-password").exec();
     }
+    async  getAllUsers(): Promise<IUser[]> {
+        return await this.model.find().select('-password').exec();
+    }
 }
 
 export default UserRepository;
