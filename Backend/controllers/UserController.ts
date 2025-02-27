@@ -10,7 +10,7 @@ export const Login = async (req: Request, res: Response) : Promise<void> => {
         const { email, password } = req.body;
         const user = await userRepository.findUserByEmailAndPassword(email, password);
         if (!user) {
-            res.status(401).json({ message: 'Invalid email or password' });
+            res.status(401).json({ message: 'Email ou mot de passe incorrect' });
             return;
         }
 
@@ -19,7 +19,7 @@ export const Login = async (req: Request, res: Response) : Promise<void> => {
         res.status(200).json({message: "Utilisateur connecté avec succès", user, token });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: 'Erreur serveur' });
     }
 }
 
@@ -27,8 +27,6 @@ export const Register = async (req: Request, res: Response): Promise<void> => {
     try {
         const user: IUser = req.body;
         let userFound = await userRepository.findUserByEmail(user.email);
-        console.log("userFound");
-        console.log(userFound);
         if (userFound !== null) {
             res.status(400).json({ error: "L'email est déjà utilisé" });
             return;
@@ -46,6 +44,6 @@ export const Register = async (req: Request, res: Response): Promise<void> => {
         res.status(200).json({message: "Utilisateur créé avec succès", user, token });
 
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Erreur serveur' });
     }
 };

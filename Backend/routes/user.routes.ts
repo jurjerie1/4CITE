@@ -5,4 +5,5 @@ const userRoutes = Router();
 
 userRoutes.post("/register", validatePost(schemas.register), Register);
 userRoutes.post("/login", validatePost(schemas.login), Login);
+
 export default userRoutes;
