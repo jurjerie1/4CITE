@@ -11,8 +11,9 @@ describe("User API", () => {
                 password: "secret",
                 pseudo: "newuser",
             });
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveProperty("token");
+        expect(res.statusCode).toEqual(201);
+        expect(res.body).toHaveProperty("message");
+        expect(res.body).toHaveProperty("user");
     });
     // test email valide
     it("should not register user with invalid email", async () => {
