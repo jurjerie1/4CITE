@@ -4,6 +4,10 @@ import Footer from "../components/Footer.tsx";
 import BannerChamber from "../assets/bannerChamber.jpg";
 import BannerRestaurant from "../assets/bannerRestaurant.jpg";
 import BannerSPA from "../assets/bannerSPA.jpg";
+import Picture from "../assets/picture.jpg";
+import Picture2 from "../assets/picture2.jpg";
+import Picture3 from "../assets/picture3.jpg";
+import Picture4 from "../assets/picture4.jpg";
 
 interface SlideType {
     url: string;
@@ -159,6 +163,25 @@ const Home = () => {
                                 </div>
                                 <h3 className="text-xl font-medium mb-2">Spa & Bien-être</h3>
                                 <p className="text-gray-600">Détendez-vous dans notre spa luxueux avec piscine, sauna et massages professionnels.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section className="py-16 bg-gray-50">
+                    <div className="container mx-auto px-4">
+                        <h2 className="text-3xl font-light text-center mb-12">Découvrez notre hôtel</h2>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div className="overflow-hidden rounded">
+                                <img src={Picture} alt="Hotel" className="w-full h-64 object-cover hover:scale-110 transition-transform duration-500" />
+                            </div>
+                            <div className="overflow-hidden rounded">
+                                <img src={Picture2} alt="Hotel" className="w-full h-64 object-cover hover:scale-110 transition-transform duration-500" />
+                            </div>
+                            <div className="overflow-hidden rounded">
+                                <img src={Picture3} alt="Hotel" className="w-full h-64 object-cover hover:scale-110 transition-transform duration-500" />
+                            </div>
+                            <div className="overflow-hidden rounded">
+                                <img src={Picture4} alt="Hotel" className="w-full h-64 object-cover hover:scale-110 transition-transform duration-500" />
                             </div>
                         </div>
                     </div>
