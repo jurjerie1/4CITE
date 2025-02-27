@@ -1,16 +1,15 @@
 import express, { Request, Response } from "express";
 import userRoutes from "./routes/user.routes.js";
 import { connectDB } from "./utils/connectDB.js";
+import cors from 'cors';
 const app = express();
 
 import dotenv from 'dotenv'
 dotenv.config()
-
+app.use(cors());
 app.use(express.json());
 connectDB();
-app.get("/", (request: Request, response: Response) => {
-  response.status(200).send("Hello World");
-});
+
 
 app.use('/api/users', userRoutes);
 

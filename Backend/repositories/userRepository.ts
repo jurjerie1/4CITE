@@ -26,6 +26,17 @@ import bcrypt from "bcrypt";
     async findUserByEmail(email: String): Promise<IUser | null> {
         return this.model.findOne({email});
     }
+
+    async updateUser(id: string, user: IUser): Promise<IUser | null> {
+        return await this.model.findByIdAndUpdate(id, user).lean().exec();
+    }
+
+    async getUserById(id: string): Promise<IUser | null> {
+        return await this.model.findById(id, "-password").exec();
+    }
+    async  getAllUsers(): Promise<IUser[]> {
+        return await this.model.find().select('-password').exec();
+    }
 }
 
 export default UserRepository;
