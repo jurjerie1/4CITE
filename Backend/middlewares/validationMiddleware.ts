@@ -23,6 +23,16 @@ export const validatePost = (schema: Joi.ObjectSchema) => {
     };
   };
 
+  export const validatePut = (schema: Joi.ObjectSchema) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+      const { error }: ValidationResult = schema.validate(req.body);
+      if (error) {
+        res.status(400).json({ error: error.details[0].message }); 
+      }
+      next();
+    };
+  };
+
   export const schemas = {
     register: Joi.object({
       email: Joi.string().email().required(),
@@ -32,5 +42,11 @@ export const validatePost = (schema: Joi.ObjectSchema) => {
     login: Joi.object({
       email: Joi.string().email().required(),
       password: Joi.string().required(),
+    }),
+    updateUser: Joi.object({
+      email: Joi.string().email().required(),
+      pseudo: Joi.string().required(),
+      password: Joi.string().required(),
+      role: Joi.number().default(null),
     }),
   };

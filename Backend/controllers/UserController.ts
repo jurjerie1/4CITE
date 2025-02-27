@@ -3,10 +3,11 @@ import { IUser, User } from '../models/user.js';
 import UserRepository from '../repositories/userRepository.js';
 import { generateToken } from '../utils/tools.js';
 import bcrypt from "bcrypt";
+import { CustomRequest } from '../utils/CustomRequest.js';
 
 const userRepository = new UserRepository(User);
 
-export const Login = async (req: Request, res: Response) : Promise<void> => {
+export const Login = async (req: Request, res: Response): Promise<void> => {
     try {
         const { email, password } = req.body;
         const user = await userRepository.findUserByEmailAndPassword(email, password);
@@ -17,7 +18,7 @@ export const Login = async (req: Request, res: Response) : Promise<void> => {
 
         const token: string = generateToken(user);
         user.password = "";
-        res.status(200).json({message: "Utilisateur connecté avec succès", user, token });
+        res.status(200).json({ message: "Utilisateur connecté avec succès", user, token });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Erreur serveur' });
@@ -43,9 +44,55 @@ export const Register = async (req: Request, res: Response): Promise<void> => {
         const token: string = generateToken(newUser);
 
         newUser.password = "";
-        res.status(201).json({message: "Utilisateur créé avec succès", user: newUser, token });
+        res.status(201).json({ message: "Utilisateur créé avec succès", user: newUser, token });
 
     } catch (error) {
         res.status(500).json({ error: 'Erreur serveur' });
+    }
+};
+
+export const UpdateUser = async (req: CustomRequest, res: Response): Promise<void> => {
+    const user: IUser = req.body;
+    let id: string;
+
+
+    if (req.userData && req.userData.role > "1" && req.params.id !== undefined) {
+        id = req.params.id;
+    } else if (req.userData && req.userData.userId) {
+        id = req.userData.userId;
+    } else {
+        res.status(400).json({ error: 'Requête invalide' });
+        return;
+    }
+
+    const userToUpdate = await userRepository.getUserById(id);
+    if (userToUpdate === null) {
+        res.status(404).json({ error: 'Utilisateur non trouvé' });
+        return
+    }
+    
+    if (req.userData && req.userData.role === "0" && id !== req.userData.userId) {
+        res.status(403).json({ error: 'Accès refusé' });
+        return;
+    }
+
+    try {
+        const emailExists = await userRepository.findUserByEmail(user.email);
+
+        if (emailExists && emailExists._id.toString() !== id) {
+            res.status(400).json({ error: 'Email déjà utilisé' });
+            return;
+        }
+        user.password = await bcrypt.hash(String(user.password), 10);
+        const updatedUser = await userRepository.updateUser(id, user);
+
+        if (!updatedUser) {
+            res.status(404).json({ error: 'Utilisateur non trouvé' });
+            return;
+        }
+        updatedUser.password = "";
+        res.json(updatedUser);
+    } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message : 'Erreur serveur' });
     }
 };
