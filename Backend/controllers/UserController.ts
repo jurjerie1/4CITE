@@ -43,7 +43,7 @@ export const Register = async (req: Request, res: Response): Promise<void> => {
         const token: string = generateToken(newUser);
 
         newUser.password = "";
-        res.status(200).json({message: "Utilisateur créé avec succès", user: newUser, token });
+        res.status(201).json({message: "Utilisateur créé avec succès", user: newUser, token });
 
     } catch (error) {
         res.status(500).json({ error: 'Erreur serveur' });
