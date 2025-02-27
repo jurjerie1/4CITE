@@ -1,5 +1,6 @@
 import request from "supertest";
 import app from "../dist/index.js";
+import { User } from "../dist/models/user.js";
 
 describe("User API", () => {
        // Test de création /register
@@ -56,5 +57,10 @@ describe("User API", () => {
                 password: "secret",
             });
         expect(res.statusCode).toEqual(400);
+    });
+    
+    // nettoyage après les tests
+    afterAll(async () => {
+        await User.deleteMany({});
     });
 }); // Fermeture correcte du describe

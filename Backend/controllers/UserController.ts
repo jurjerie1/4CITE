@@ -14,7 +14,13 @@ export const Login = async (req: Request, res: Response) : Promise<void> => {
 export const Register = async (req: Request, res: Response): Promise<void> => {
     try {
         const user: IUser = req.body;
-
+        let userFound = await userRepository.findUserByEmail(user.email);
+        console.log("userFound");
+        console.log(userFound);
+        if (userFound !== null) {
+            res.status(400).json({ error: "L'email est déjà utilisé" });
+            return;
+        }
         // Hash the password
         const saltRounds = 10;
         user.password = await bcrypt.hash(String(user.password), saltRounds);

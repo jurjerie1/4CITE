@@ -12,6 +12,10 @@ import bcrypt from "bcrypt";
     createUser(user: IUser): Promise<IUser> {
         return this.model.create(user);
     }
+
+    async findUserByEmail(email: String): Promise<IUser | null> {
+        return this.model.findOne({email});
+    }
 }
 
 export default UserRepository;
