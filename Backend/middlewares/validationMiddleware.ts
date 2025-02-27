@@ -1,21 +1,23 @@
 import { Request, Response, NextFunction } from 'express';
 import Joi, { ObjectSchema, ValidationResult } from 'joi';
 
-export const validatePost = (schema: ObjectSchema) => {
-    return (req: Request, res: Response, next: NextFunction) => {
-      const { error }: ValidationResult = schema.validate(req.body);
+export const validatePost = (schema: Joi.ObjectSchema) => {
+    return (req: Request, res: Response, next: NextFunction): void => {
+      const { error } = schema.validate(req.body);
+      
       if (error) {
-        return res.status(400).json({ error: error.details[0].message });
+        res.status(400).json({ error: error.details[0].message });
+      } else {
+        next();
       }
-      next();
     };
   };
   
-  export const validateGet = (schema: ObjectSchema) => {
+  export const validateGet = (schema: Joi.ObjectSchema) => {
     return (req: Request, res: Response, next: NextFunction) => {
       const { error }: ValidationResult = schema.validate(req.query);
       if (error) {
-        return res.status(400).json({ error: error.details[0].message }); 
+        res.status(400).json({ error: error.details[0].message }); 
       }
       next();
     };

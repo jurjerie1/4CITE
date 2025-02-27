@@ -5,7 +5,7 @@ describe("User API", () => {
        // Test de création /register
     it("should register user", async () => {
         const res = await request(app)
-            .post("api/users/register")
+            .post("/api/users/register")
             .send({
                 email: "newuser@example.com",  
                 password: "secret",
@@ -17,7 +17,7 @@ describe("User API", () => {
     // test email valide
     it("should not register user with invalid email", async () => {
         const res = await request(app)
-            .post("api/users/register")
+            .post("/api/users/register")
             .send({
                 email: "newuser",  
                 password: "secret",
@@ -28,7 +28,7 @@ describe("User API", () => {
     // test email déjà existant
     it("should not register user with existing email", async () => {
         const res = await request(app)
-            .post("api/users/register")
+            .post("/api/users/register")
             .send({
                 email: "newuser@example.com",  
                 password: "secret",
