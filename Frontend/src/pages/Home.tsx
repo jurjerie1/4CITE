@@ -127,6 +127,42 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
+                <section className="py-16 px-4">
+                    <div className="container mx-auto">
+                        <h2 className="text-3xl font-light text-center mb-12">Nos Services</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div className="text-center">
+                                <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-gold-100">
+                                    <svg className="w-8 h-8 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                                    </svg>
+                                </div>
+                                <h3 className="text-xl font-medium mb-2">Chambres de luxe</h3>
+                                <p className="text-gray-600">Profitez de nos chambres élégantes avec une vue panoramique et des équipements premium.</p>
+                            </div>
+
+                            <div className="text-center">
+                                <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-gold-100">
+                                    <svg className="w-8 h-8 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                    </svg>
+                                </div>
+                                <h3 className="text-xl font-medium mb-2">Restaurant gastronomique</h3>
+                                <p className="text-gray-600">Savourez une cuisine raffinée préparée par notre chef étoilé dans un cadre exceptionnel.</p>
+                            </div>
+
+                            <div className="text-center">
+                                <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-gold-100">
+                                    <svg className="w-8 h-8 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <h3 className="text-xl font-medium mb-2">Spa & Bien-être</h3>
+                                <p className="text-gray-600">Détendez-vous dans notre spa luxueux avec piscine, sauna et massages professionnels.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </main>
             <Footer />
         </div>
