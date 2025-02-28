@@ -8,7 +8,7 @@ const Header: React.FC = () => {
                 <div className="flex justify-between items-center">
                     <div className="flex items-center">
                         <div className="flex items-center">
-                            <img src={logo} alt="Akkor Hotel Logo" className="h-18 mr-4" />
+                            <a href="/"><img src={logo} alt="Akkor Hotel Logo" className="h-18 mr-4" /></a>
                         </div>
                     </div>
 
@@ -19,7 +19,7 @@ const Header: React.FC = () => {
                     </nav>
 
                     <div className="hidden md:block">
-                        <a href="/login" className="header-button px-6 py-2 rounded hover:bg-gold-600 transition-colors">
+                        <a href="/login" className="bg-black text-white px-6 py-2 rounded hover:bg-gold-600 transition-colors">
                             Connexion
                         </a>
                     </div>
