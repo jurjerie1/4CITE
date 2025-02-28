@@ -31,7 +31,7 @@ const Login: React.FC = () => {
                     <h2 className="text-3xl font-light text-center mb-12">Se connecter</h2>
                     <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                         <div className="mb-4">
-                            <label className="block text-gray-700">Email <span className="text-red">*</span></label>
+                            <label className="block text-gray-700">Email <span className="text-red-500">*</span></label>
                             <input
                                 type="email"
                                 value={email}
@@ -41,7 +41,7 @@ const Login: React.FC = () => {
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-gray-700">Mot de passe <span className="text-red">*</span>
+                            <label className="block text-gray-700">Mot de passe <span className="text-red-500">*</span>
                             </label>
                             <input
                                 type="password"
@@ -51,7 +51,7 @@ const Login: React.FC = () => {
                                 required
                             />
                         </div>
-                        <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded">Connexion</button>
+                        <button type="submit" className="w-full bg-black text-white py-2 rounded">Connexion</button>
                         {message && <p className="mt-4 text-center text-red-500">{message}</p>}
                         <p className="mt-2 text-center">Pas encore de compte ? <a href="/register">S'inscrire</a></p>
                     </form>

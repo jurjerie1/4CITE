@@ -24,7 +24,7 @@ const Register: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col min-h-screen w-screen">
+        <div className="flex flex-col min-h-screen">
             <Header/>
             <main
                 className="flex-grow flex items-center justify-center container mx-auto px-4 pt-24"> {/* Center the content */}
@@ -32,7 +32,7 @@ const Register: React.FC = () => {
                     <h2 className="text-3xl font-light text-center mb-12">Inscription</h2>
                     <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                         <div className="mb-4">
-                            <label className="block text-gray-700">Email <span className="text-red">*</span></label>
+                            <label className="block text-gray-700">Email <span className="text-red-500">*</span></label>
                             <input
                                 type="email"
                                 value={email}
@@ -43,7 +43,7 @@ const Register: React.FC = () => {
                         </div>
                         <div className="mb-4">
                             <label className="block text-gray-700">Mot de passe <span
-                                className="text-red">*</span></label>
+                                className="text-red-500">*</span></label>
                             <input
                                 type="password"
                                 value={password}
@@ -53,7 +53,7 @@ const Register: React.FC = () => {
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-gray-700">Pseudo <span className="text-red">*</span></label>
+                            <label className="block text-gray-700">Pseudo <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 value={pseudo}
@@ -62,7 +62,7 @@ const Register: React.FC = () => {
                                 required
                             />
                         </div>
-                        <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded">S'inscrire</button>
+                        <button type="submit" className="w-full bg-black text-white py-2 rounded">S'inscrire</button>
                         {message && <p className="mt-4 text-center text-red-500">{message}</p>}
                         <p className="mt-2 text-center">Vous avez déjà un compte ? <a href="/login">Se connecter</a></p>
                     </form>
