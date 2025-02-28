@@ -106,7 +106,6 @@ export const UpdateUser = async (req: CustomRequest, res: Response): Promise<voi
         console.error(error);
         res.status(500).json({ error: 'Erreur serveur' });
         return;
-
     }
 };
 

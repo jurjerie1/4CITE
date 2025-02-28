@@ -3,6 +3,7 @@ import app from "../index";
 import { User } from "../models/user";
 
 describe("User", () => {
+
     describe("User Register", () => {
         // Test de création /register
         it("should register user", async () => {
@@ -135,7 +136,21 @@ describe("User", () => {
             expect(res.body).toHaveProperty("message", "Utilisateur modifié avec succès");
             expect(res.body).toHaveProperty("user");
         });
-        
+
+        // test sans modifier le mot de passe
+        it("should update user with empty password", async () => {
+            const res = await request(app)
+                .put("/api/users/")
+                .set("Authorization", `Bearer ${token}`)
+                .send({
+                    email: "newuser@example.com",
+                    pseudo: "newuser",
+                });
+            expect(res.statusCode).toEqual(200);
+            expect(res.body).toHaveProperty("message", "Utilisateur modifié avec succès");
+            expect(res.body).toHaveProperty("user");
+        });
+
         // test avec un token invalide
         it("should not update user with invalid token", async () => {
             const res = await request(app)
@@ -164,19 +179,7 @@ describe("User", () => {
 
 
 
-        // test sans modifier le mot de passe
-        it("should update user with empty password", async () => {
-            const res = await request(app)
-                .put("/api/users/")
-                .set("Authorization", `Bearer ${token}`)
-                .send({
-                    email: "newuser@example.com",
-                    pseudo: "newuser",
-                });
-            expect(res.statusCode).toEqual(200);
-            expect(res.body).toHaveProperty("message", "Utilisateur modifié avec succès");
-            expect(res.body).toHaveProperty("user");
-        });
+        
 
 
     });
