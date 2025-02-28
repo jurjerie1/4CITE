@@ -91,7 +91,7 @@ export const UpdateUser = async (req: CustomRequest, res: Response): Promise<voi
             return;
         }
         updatedUser.password = "";
-        res.json(updatedUser);
+        res.json({ message: 'Utilisateur modifié avec succès', user: updatedUser });
     } catch (error) {
         res.status(500).json({ error: error instanceof Error ? error.message : 'Erreur serveur' });
     }
