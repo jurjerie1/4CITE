@@ -1,5 +1,5 @@
 import { Model, Document } from 'mongoose';
-import { IUser } from '../models/user.js';
+import { IUser } from '../models/user.ts';
 import bcrypt from "bcrypt";
 
  class UserRepository {

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { IDecodedToken } from '../models/IDecodedToken.js';
+import { IDecodedToken } from '../models/IDecodedToken.ts';
 import jwt from 'jsonwebtoken';
-import {CustomRequest} from "../utils/CustomRequest.js";
+import {CustomRequest} from "../utils/CustomRequest.ts";
 
 
 

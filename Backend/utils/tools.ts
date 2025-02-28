@@ -1,4 +1,4 @@
-import { IUser } from "../models/user.js";
+import { IUser } from "../models/user.ts";
 import jwt, { SignOptions } from 'jsonwebtoken';
 
 export function generateToken(user: IUser) {

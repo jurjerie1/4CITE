@@ -1,13 +1,13 @@
 import express, { Request, Response } from "express";
-import userRoutes from "./routes/user.routes.js";
-import { connectDB } from "./utils/connectDB.js";
+import userRoutes from "./routes/user.routes.ts";
+import { connectDB } from "./utils/connectDB.ts";
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
-import { setupSwagger } from "./swagger.js";
+import { setupSwagger } from "./swagger.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

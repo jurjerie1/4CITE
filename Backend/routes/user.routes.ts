@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { Login, Register, UpdateUser, GetAllUsers, GetUserById } from "../controllers/UserController.js";
-import { validatePost, schemas, validatePut } from "../middlewares/validationMiddleware.js";
-import { admin, auth } from "../middlewares/authentification.js";
+import { Login, Register, UpdateUser, GetAllUsers, GetUserById } from "../controllers/UserController.ts";
+import { validatePost, schemas, validatePut } from "../middlewares/validationMiddleware.ts";
+import { admin, auth } from "../middlewares/authentification.ts";
 const userRoutes = Router();
 
 /**

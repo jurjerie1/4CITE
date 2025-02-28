@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { IUser, User } from '../models/user.js';
-import UserRepository from '../repositories/userRepository.js';
-import { generateToken } from '../utils/tools.js';
+import { IUser, User } from '../models/user.ts';
+import UserRepository from '../repositories/userRepository.ts';
+import { generateToken } from '../utils/tools.ts';
 import bcrypt from "bcrypt";
-import { CustomRequest } from '../utils/CustomRequest.js';
+import { CustomRequest } from '../utils/CustomRequest.ts';
 
 const userRepository = new UserRepository(User);
 

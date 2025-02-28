@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npx tsc && node dist/index.js",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'npx tsc && node dist/index.js'",
+    "dev": "nodemon --exec tsx index.ts",
     "test": "npx tsc &&  NODE_OPTIONS='--experimental-vm-modules' jest ./tests/user.test.js"
   },
   "keywords": [],
@@ -38,6 +38,8 @@
     "@types/node": "^22.13.5",
     "@types/swagger-ui-express": "^4.1.8",
     "@types/yamljs": "^0.2.34",
+    "nodemon": "^3.1.9",
+    "tsx": "^4.19.3",
     "typescript": "^5.7.3"
   }
 }
