@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Login, Register, UpdateUser, GetAllUsers, GetUserById } from "../controllers/UserController.ts";
+import { Login, Register, UpdateUser, GetAllUsers, GetUserById, DeleteUser } from "../controllers/UserController.ts";
 import { validatePost, schemas, validatePut } from "../middlewares/validationMiddleware.ts";
 import { admin, auth } from "../middlewares/authentification.ts";
 const userRoutes = Router();
@@ -134,4 +134,5 @@ userRoutes.get("/getAll", auth, admin, GetAllUsers);
  */
 userRoutes.get("/:id?", auth, GetUserById);
 
+userRoutes.delete("/", auth, DeleteUser);
 export default userRoutes;

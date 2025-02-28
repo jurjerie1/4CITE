@@ -37,6 +37,10 @@ import bcrypt from "bcrypt";
     async  getAllUsers(): Promise<IUser[]> {
         return await this.model.find().select('-password').exec();
     }
+    deleteUser(id: string): Promise<IUser | null> {
+        return this.model.findByIdAndDelete(id).lean().exec();
+    }
+
 }
 
 export default UserRepository;

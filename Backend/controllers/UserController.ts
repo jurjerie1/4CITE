@@ -123,3 +123,17 @@ export const GetUserById = async (req: CustomRequest, res: Response): Promise<vo
         res.status(500).json({ error: error instanceof Error ? error.message : 'Erreur serveur' });
     }
 };
+
+export const DeleteUser = async (req: CustomRequest, res: Response): Promise<void> => {
+    let id = req.userData?.userId as string;
+    try {
+        const train = await userRepository.deleteUser(id);
+        if (!train) {
+            res.status(404).json({ error: 'Utilisateur non trouvé' });
+            return;
+        }
+        res.json(train);
+    } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message : "Erreur serveur" });
+    }
+};
