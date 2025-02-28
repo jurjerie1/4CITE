@@ -122,6 +122,20 @@ describe("User", () => {
             expect(res.body).toHaveProperty("user");
         });
 
+        // test sans modifier le pseudo
+        it("should update user with empty pseudo", async () => {
+            const res = await request(app)
+                .put("/api/users/")
+                .set("Authorization", `Bearer ${token}`)
+                .send({
+                    email: "newuser@example.com",
+                    password: "secret",
+                });
+            expect(res.statusCode).toEqual(200);
+            expect(res.body).toHaveProperty("message", "Utilisateur modifié avec succès");
+            expect(res.body).toHaveProperty("user");
+        });
+        
         // test avec un token invalide
         it("should not update user with invalid token", async () => {
             const res = await request(app)
@@ -149,11 +163,26 @@ describe("User", () => {
         });
 
 
-    });
-    
 
-    // nettoyage après les tests
+        // test sans modifier le mot de passe
+        it("should update user with empty password", async () => {
+            const res = await request(app)
+                .put("/api/users/")
+                .set("Authorization", `Bearer ${token}`)
+                .send({
+                    email: "newuser@example.com",
+                    pseudo: "newuser",
+                });
+            expect(res.statusCode).toEqual(200);
+            expect(res.body).toHaveProperty("message", "Utilisateur modifié avec succès");
+            expect(res.body).toHaveProperty("user");
+        });
+
+
+    });
+
+    // nettoyage de la base de données
     afterAll(async () => {
         await User.deleteMany({});
     });
-}); // Fermeture correcte du describe
+}); 

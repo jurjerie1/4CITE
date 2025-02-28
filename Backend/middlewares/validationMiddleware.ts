@@ -104,15 +104,16 @@ export const schemas = {
       email: Joi.string().email().required(),
       pseudo: Joi.string().required(),
       password: Joi.string().required(),
+      role: Joi.number().default(0),
     }),
     login: Joi.object({
       email: Joi.string().email().required(),
       password: Joi.string().required(),
     }),
     updateUser: Joi.object({
-      email: Joi.string().email().required(),
-      pseudo: Joi.string().required(),
-      password: Joi.string().required(),
+      email: Joi.string().email(),
+      pseudo: Joi.string(),
+      password: Joi.string(),
       role: Joi.number().default(null),
     }),
 };
