@@ -89,10 +89,10 @@ export const UpdateUser = async (req: CustomRequest, res: Response): Promise<voi
     }
     try {
         const updatedUser = await userRepository.updateUser(id, user);
-        // if (!updatedUser) {
-        //     res.status(404).json({ error: 'Utilisateur non trouvé' });
-        //     return;
-        // }
+        if (!updatedUser) {
+            res.status(404).json({ error: 'Utilisateur non trouvé' });
+            return;
+        }
 
         updatedUser.password = "";
         res.status(200).json({ message: 'Utilisateur modifié avec succès', user: updatedUser });
@@ -114,7 +114,7 @@ export const GetAllUsers = async (req: Request, res: Response): Promise<void> =>
 
 export const GetUserById = async (req: CustomRequest, res: Response): Promise<void> => {
     let id = req.params.id || req.userData.userId;
-    if (req.userData && req.userData.role > "1" && req.params.id !== undefined) {
+    if (req.userData && req.userData.role > "0" && req.params.id !== undefined) {
         id = req.params.id;
     } else if (req.userData.userId == id) {
         id = req.userData.userId;
@@ -133,6 +133,11 @@ export const GetUserById = async (req: CustomRequest, res: Response): Promise<vo
 
 export const DeleteUser = async (req: CustomRequest, res: Response): Promise<void> => {
     let id = req.userData?.userId as string;
+    const user = await userRepository.getUserById(id);
+    if (!user) {
+        res.status(404).json({ error: 'Utilisateur non trouvé' });
+        return;
+    }
     try {
         const user = await userRepository.deleteUser(id);
         if (!user) {

@@ -1,5 +1,5 @@
 import request from "supertest";
-import {app, server} from "../index";
+import { app, server } from "../index";
 
 import { User } from "../models/user";
 import mongoose from "mongoose";
@@ -179,18 +179,22 @@ describe("User", () => {
             expect(res.statusCode).toEqual(400);
         });
 
-
-
-        
-
+        // Test des middlewares d'authentification
+        it("should return 401 when no token is provided", async () => {
+            const res = await request(app)
+                .get("/api/users/getAll")
+                .send();
+            expect(res.statusCode).toEqual(401);
+        });
 
     });
+
+
 
     // nettoyage de la base de données
     afterAll(async () => {
         await User.deleteMany({});
         await mongoose.connection.close();
         server.close();
-        
     });
 }); 
