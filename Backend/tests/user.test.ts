@@ -1,6 +1,8 @@
 import request from "supertest";
-import app from "../index";
+import {app, server} from "../index";
+
 import { User } from "../models/user";
+import mongoose from "mongoose";
 
 describe("User", () => {
 
@@ -187,5 +189,8 @@ describe("User", () => {
     // nettoyage de la base de données
     afterAll(async () => {
         await User.deleteMany({});
+        await mongoose.connection.close();
+        server.close();
+        
     });
 }); 

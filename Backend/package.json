@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx tsc && node dist/index.js",
     "dev": "nodemon --exec tsx index.ts",
-    "test": "NODE_OPTIONS='--experimental-vm-modules' jest --runInBand --detectOpenHandles"
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest --runInBand "
   },
   "keywords": [],
   "author": "",

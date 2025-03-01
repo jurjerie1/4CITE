@@ -21,8 +21,8 @@ app.use('/api/users', userRoutes);
 
 setupSwagger(app);
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+const server = app.listen(3000, () => {
+  console.log("Server is running on port 3000");
 });
 
-export default app;
+export {app, server};
