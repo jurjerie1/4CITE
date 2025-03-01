@@ -110,6 +110,18 @@ describe("User", () => {
             expect(res.body).toHaveProperty("message", "Email ou mot de passe incorrect");
         });
 
+        // test de la partie authentification
+
+        // Test des middlewares d'authentification
+        it("should return 401 when no token is provided", async () => {
+            const res = await request(app)
+                .get("/api/users/getAll")
+                .send();
+            expect(res.statusCode).toEqual(401);
+        });
+
+        
+
         // update user
         it("should update user", async () => {
             const res = await request(app)
@@ -179,13 +191,7 @@ describe("User", () => {
             expect(res.statusCode).toEqual(400);
         });
 
-        // Test des middlewares d'authentification
-        it("should return 401 when no token is provided", async () => {
-            const res = await request(app)
-                .get("/api/users/getAll")
-                .send();
-            expect(res.statusCode).toEqual(401);
-        });
+        
 
     });
 
