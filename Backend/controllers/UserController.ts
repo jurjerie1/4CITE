@@ -23,7 +23,7 @@ export const Login = async (req: Request, res: Response): Promise<void> => {
         console.error(error);
         res.status(500).json({ error: 'Erreur serveur' });
     }
-}
+};
 
 export const Register = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -38,15 +38,16 @@ export const Register = async (req: Request, res: Response): Promise<void> => {
         user.password = await bcrypt.hash(String(user.password), saltRounds);
 
         // ajout du role par défaut (user : 0)
-        user.role = 0;
+        // commenté pour le dev
+        // user.role = 0;
         const newUser: IUser = await userRepository.createUser(user);
 
         const token: string = generateToken(newUser);
 
         newUser.password = "";
         res.status(201).json({ message: "Utilisateur créé avec succès", user: newUser, token });
-
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Erreur serveur' });
     }
 };
@@ -55,10 +56,9 @@ export const UpdateUser = async (req: CustomRequest, res: Response): Promise<voi
     const user: IUser = req.body;
     let id: string;
 
-
-    if (req.userData && req.userData.role > "1" && req.params.id !== undefined) {
+    if (req.userData?.role > "1" && req.params.id) {
         id = req.params.id;
-    } else if (req.userData && req.userData.userId) {
+    } else if (req.userData?.userId) {
         id = req.userData.userId;
     } else {
         res.status(400).json({ error: 'Requête invalide' });
@@ -66,34 +66,39 @@ export const UpdateUser = async (req: CustomRequest, res: Response): Promise<voi
     }
 
     const userToUpdate = await userRepository.getUserById(id);
-    if (userToUpdate === null) {
+    if (!userToUpdate) {
         res.status(404).json({ error: 'Utilisateur non trouvé' });
-        return
+        return;
     }
 
-    if (req.userData && req.userData.role === "0" && id !== req.userData.userId) {
+    if (req.userData?.role === "0" && id !== req.userData.userId) {
         res.status(403).json({ error: 'Accès refusé' });
         return;
     }
 
-    try {
+    if (user.email) {
         const emailExists = await userRepository.findUserByEmail(user.email);
-
         if (emailExists && emailExists._id.toString() !== id) {
             res.status(400).json({ error: 'Email déjà utilisé' });
             return;
         }
-        user.password = await bcrypt.hash(String(user.password), 10);
-        const updatedUser = await userRepository.updateUser(id, user);
+    }
 
-        if (!updatedUser) {
-            res.status(404).json({ error: 'Utilisateur non trouvé' });
-            return;
-        }
+    if (user.password) {
+        user.password = await bcrypt.hash(String(user.password), 10);
+    }
+    try {
+        const updatedUser = await userRepository.updateUser(id, user);
+        // if (!updatedUser) {
+        //     res.status(404).json({ error: 'Utilisateur non trouvé' });
+        //     return;
+        // }
+
         updatedUser.password = "";
-        res.json(updatedUser);
+        res.status(200).json({ message: 'Utilisateur modifié avec succès', user: updatedUser });
     } catch (error) {
-        res.status(500).json({ error: error instanceof Error ? error.message : 'Erreur serveur' });
+        console.error(error);
+        res.status(500).json({ error: 'Erreur serveur' });
     }
 };
 
@@ -102,6 +107,7 @@ export const GetAllUsers = async (req: Request, res: Response): Promise<void> =>
         const users = await userRepository.getAllUsers();
         res.json(users);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: error instanceof Error ? error.message : 'Erreur serveur' });
     }
 };
@@ -117,9 +123,10 @@ export const GetUserById = async (req: CustomRequest, res: Response): Promise<vo
         return;
     }
     try {
-        const users = await userRepository.getUserById(id);
-        res.json(users);
+        const user = await userRepository.getUserById(id);
+        res.json(user);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: error instanceof Error ? error.message : 'Erreur serveur' });
     }
 };
@@ -127,13 +134,14 @@ export const GetUserById = async (req: CustomRequest, res: Response): Promise<vo
 export const DeleteUser = async (req: CustomRequest, res: Response): Promise<void> => {
     let id = req.userData?.userId as string;
     try {
-        const train = await userRepository.deleteUser(id);
-        if (!train) {
+        const user = await userRepository.deleteUser(id);
+        if (!user) {
             res.status(404).json({ error: 'Utilisateur non trouvé' });
             return;
         }
-        res.json(train);
+        res.json(user);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: error instanceof Error ? error.message : "Erreur serveur" });
     }
 };

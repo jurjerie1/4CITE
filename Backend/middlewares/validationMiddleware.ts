@@ -60,6 +60,7 @@ export const validatePost = (schema: Joi.ObjectSchema) => {
       
       if (error) {
         res.status(400).json({ error: error.details[0].message });
+        return;
       } else {
         next();
       }
@@ -76,6 +77,7 @@ export const validateGet = (schema: Joi.ObjectSchema) => {
       const { error }: ValidationResult = schema.validate(req.query);
       if (error) {
         res.status(400).json({ error: error.details[0].message }); 
+        return;
       }
       next();
     };
@@ -91,6 +93,7 @@ export const validatePut = (schema: Joi.ObjectSchema) => {
       const { error }: ValidationResult = schema.validate(req.body);
       if (error) {
         res.status(400).json({ error: error.details[0].message }); 
+        return;
       }
       next();
     };
@@ -104,15 +107,16 @@ export const schemas = {
       email: Joi.string().email().required(),
       pseudo: Joi.string().required(),
       password: Joi.string().required(),
+      role: Joi.number().default(0),
     }),
     login: Joi.object({
       email: Joi.string().email().required(),
       password: Joi.string().required(),
     }),
     updateUser: Joi.object({
-      email: Joi.string().email().required(),
-      pseudo: Joi.string().required(),
-      password: Joi.string().required(),
+      email: Joi.string().email(),
+      pseudo: Joi.string(),
+      password: Joi.string(),
       role: Joi.number().default(null),
     }),
 };
