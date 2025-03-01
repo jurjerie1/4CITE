@@ -23,7 +23,7 @@ export const Login = async (req: Request, res: Response): Promise<void> => {
         console.error(error);
         res.status(500).json({ error: 'Erreur serveur' });
     }
-}
+};
 
 export const Register = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -38,7 +38,7 @@ export const Register = async (req: Request, res: Response): Promise<void> => {
         user.password = await bcrypt.hash(String(user.password), saltRounds);
 
         // ajout du role par défaut (user : 0)
-        // commenté pour le dev 
+        // commenté pour le dev
         // user.role = 0;
         const newUser: IUser = await userRepository.createUser(user);
 
@@ -46,12 +46,11 @@ export const Register = async (req: Request, res: Response): Promise<void> => {
 
         newUser.password = "";
         res.status(201).json({ message: "Utilisateur créé avec succès", user: newUser, token });
-
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Erreur serveur' });
     }
 };
-
 
 export const UpdateUser = async (req: CustomRequest, res: Response): Promise<void> => {
     const user: IUser = req.body;
@@ -75,37 +74,31 @@ export const UpdateUser = async (req: CustomRequest, res: Response): Promise<voi
     if (req.userData?.role === "0" && id !== req.userData.userId) {
         res.status(403).json({ error: 'Accès refusé' });
         return;
-
     }
 
-    try {
-        if (user.email) {
-            const emailExists = await userRepository.findUserByEmail(user.email);
-            if (emailExists && emailExists._id.toString() !== id) {
-                res.status(400).json({ error: 'Email déjà utilisé' });
-                return;
-
-            }
-        }
-
-        if (user.password) {
-            user.password = await bcrypt.hash(String(user.password), 10);
-        }
-
-        const updatedUser = await userRepository.updateUser(id, user);
-        if (!updatedUser) {
-            res.status(404).json({ error: 'Utilisateur non trouvé' });
+    if (user.email) {
+        const emailExists = await userRepository.findUserByEmail(user.email);
+        if (emailExists && emailExists._id.toString() !== id) {
+            res.status(400).json({ error: 'Email déjà utilisé' });
             return;
         }
+    }
+
+    if (user.password) {
+        user.password = await bcrypt.hash(String(user.password), 10);
+    }
+    try {
+        const updatedUser = await userRepository.updateUser(id, user);
+        // if (!updatedUser) {
+        //     res.status(404).json({ error: 'Utilisateur non trouvé' });
+        //     return;
+        // }
 
         updatedUser.password = "";
         res.status(200).json({ message: 'Utilisateur modifié avec succès', user: updatedUser });
-        return;
-
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Erreur serveur' });
-        return;
     }
 };
 
@@ -114,6 +107,7 @@ export const GetAllUsers = async (req: Request, res: Response): Promise<void> =>
         const users = await userRepository.getAllUsers();
         res.json(users);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: error instanceof Error ? error.message : 'Erreur serveur' });
     }
 };
@@ -129,9 +123,10 @@ export const GetUserById = async (req: CustomRequest, res: Response): Promise<vo
         return;
     }
     try {
-        const users = await userRepository.getUserById(id);
-        res.json(users);
+        const user = await userRepository.getUserById(id);
+        res.json(user);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: error instanceof Error ? error.message : 'Erreur serveur' });
     }
 };
@@ -139,13 +134,14 @@ export const GetUserById = async (req: CustomRequest, res: Response): Promise<vo
 export const DeleteUser = async (req: CustomRequest, res: Response): Promise<void> => {
     let id = req.userData?.userId as string;
     try {
-        const train = await userRepository.deleteUser(id);
-        if (!train) {
+        const user = await userRepository.deleteUser(id);
+        if (!user) {
             res.status(404).json({ error: 'Utilisateur non trouvé' });
             return;
         }
-        res.json(train);
+        res.json(user);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: error instanceof Error ? error.message : "Erreur serveur" });
     }
 };
