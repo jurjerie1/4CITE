@@ -13,4 +13,6 @@ export default {
     moduleNameMapper: {
       '^(\\.{1,2}/.*)\\.js$': '$1',
     },
+    // lance les tests quand je le demande
+    watchPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
   };

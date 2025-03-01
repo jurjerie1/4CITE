@@ -113,10 +113,12 @@ export const GetAllUsers = async (req: Request, res: Response): Promise<void> =>
 };
 
 export const GetUserById = async (req: CustomRequest, res: Response): Promise<void> => {
-    let id = req.params.id || req.userData.userId;
+    let id = req.query?.id as string | undefined;
+    console.log("id", id);
+
     if (req.userData && req.userData.role > "0" && req.params.id !== undefined) {
         id = req.params.id;
-    } else if (req.userData.userId == id) {
+    } else if (id === undefined && req.userData) {
         id = req.userData.userId;
     } else {
         res.status(403).json({ error: 'Accès refusé' });

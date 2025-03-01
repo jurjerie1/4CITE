@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { Login, Register, UpdateUser, GetAllUsers, GetUserById, DeleteUser } from "../controllers/UserController.ts";
 import { validatePost, schemas, validatePut } from "../middlewares/validationMiddleware.ts";
-import { admin, auth } from "../middlewares/authentification.ts";
+import { admin, auth, employe } from "../middlewares/authentification.ts";
 const userRoutes = Router();
 
 /**
@@ -232,11 +232,11 @@ userRoutes.put("/:id?", auth, validatePut(schemas.updateUser), UpdateUser);
  *       401:
  *         description: Non authentifié
  *       403:
- *         description: Accès refusé (non admin)
+ *         description: Accès refusé (non employé ou admin)
  *       500:
  *         description: Erreur serveur
  */
-userRoutes.get("/getAll", auth, admin, GetAllUsers);
+userRoutes.get("/getAll", auth, employe, GetAllUsers);
 
 /**
  * @swagger
