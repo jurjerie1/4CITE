@@ -32,6 +32,6 @@ jobs:
       working-directory: ./Backend
 
     - name: Run Tests
-      run: npm test --runInBand
+      run: NODE_OPTIONS='--experimental-vm-modules' jest --runInBand
       working-directory: ./Backend
       
