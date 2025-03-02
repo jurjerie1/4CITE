@@ -1,3 +1,4 @@
+
 import { Request, Response, NextFunction } from 'express';
 import { IUser, User } from '../models/user.ts';
 import UserRepository from '../repositories/userRepository.ts';
@@ -28,6 +29,7 @@ export const Login = async (req: Request, res: Response): Promise<void> => {
 export const Register = async (req: Request, res: Response): Promise<void> => {
     try {
         const user: IUser = req.body;
+        console.log(user);
         let userFound = await userRepository.findUserByEmail(user.email);
         if (userFound !== null) {
             res.status(400).json({ error: "L'email est déjà utilisé" });
@@ -55,16 +57,14 @@ export const Register = async (req: Request, res: Response): Promise<void> => {
 export const UpdateUser = async (req: CustomRequest, res: Response): Promise<void> => {
     const user: IUser = req.body;
     let id: string;
-
-    if (req.userData?.role > "1" && req.params.id) {
-        id = req.params.id;
-    } else if (req.userData?.userId) {
+    if (req.userData && req.userData.role > "1" && req.params.id != undefined) {
+        id = req.params.id as string;
+    } else if (req.params.id === undefined || req.params.id === req.userData.userId) {
         id = req.userData.userId;
     } else {
-        res.status(400).json({ error: 'Requête invalide' });
+        res.status(403).json({ error: 'Vous ne pouvez pas modifier cet utilisateur' });
         return;
     }
-
     const userToUpdate = await userRepository.getUserById(id);
     if (!userToUpdate) {
         res.status(404).json({ error: 'Utilisateur non trouvé' });
@@ -89,10 +89,10 @@ export const UpdateUser = async (req: CustomRequest, res: Response): Promise<voi
     }
     try {
         const updatedUser = await userRepository.updateUser(id, user);
-        // if (!updatedUser) {
-        //     res.status(404).json({ error: 'Utilisateur non trouvé' });
-        //     return;
-        // }
+        if (!updatedUser) {
+            res.status(404).json({ error: 'Utilisateur non trouvé' });
+            return;
+        }
 
         updatedUser.password = "";
         res.status(200).json({ message: 'Utilisateur modifié avec succès', user: updatedUser });
@@ -113,10 +113,11 @@ export const GetAllUsers = async (req: Request, res: Response): Promise<void> =>
 };
 
 export const GetUserById = async (req: CustomRequest, res: Response): Promise<void> => {
-    let id = req.params.id || req.userData.userId;
-    if (req.userData && req.userData.role > "1" && req.params.id !== undefined) {
-        id = req.params.id;
-    } else if (req.userData.userId == id) {
+    let id = req?.params?.id as string;
+
+    if (req.userData && req.userData.role > "0" && req?.params?.id !== undefined) {
+        id = req?.params?.id as string;
+    } else if (id === undefined && req.userData) {
         id = req.userData.userId;
     } else {
         res.status(403).json({ error: 'Accès refusé' });
@@ -133,6 +134,11 @@ export const GetUserById = async (req: CustomRequest, res: Response): Promise<vo
 
 export const DeleteUser = async (req: CustomRequest, res: Response): Promise<void> => {
     let id = req.userData?.userId as string;
+    const user = await userRepository.getUserById(id);
+    if (!user) {
+        res.status(404).json({ error: 'Utilisateur non trouvé' });
+        return;
+    }
     try {
         const user = await userRepository.deleteUser(id);
         if (!user) {
