@@ -58,7 +58,19 @@ const userRoutes = Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             type: object
+ *             required:
+ *               - email
+ *               - pseudo
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               pseudo:
+ *                 type: string
+ *               password:
+ *                 type: string
  *     responses:
  *       201:
  *         description: Utilisateur créé avec succès
