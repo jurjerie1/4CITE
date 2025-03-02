@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx tsc && node dist/index.js",
     "dev": "nodemon --exec tsx index.ts",
-    "test": "test": "NODE_OPTIONS='--experimental-vm-modules' jest --runInBand "
+     "test": "NODE_OPTIONS='--experimental-vm-modules' jest --runInBand "
   },
   "keywords": [],
   "author": "",
