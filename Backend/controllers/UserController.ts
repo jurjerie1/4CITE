@@ -28,6 +28,7 @@ export const Login = async (req: Request, res: Response): Promise<void> => {
 export const Register = async (req: Request, res: Response): Promise<void> => {
     try {
         const user: IUser = req.body;
+        console.log(user);
         let userFound = await userRepository.findUserByEmail(user.email);
         if (userFound !== null) {
             res.status(400).json({ error: "L'email est déjà utilisé" });
@@ -55,16 +56,14 @@ export const Register = async (req: Request, res: Response): Promise<void> => {
 export const UpdateUser = async (req: CustomRequest, res: Response): Promise<void> => {
     const user: IUser = req.body;
     let id: string;
-
-    if (req.userData?.role > "1" && req.params.id) {
-        id = req.params.id;
-    } else if (req.userData?.userId) {
+    if (req.userData && req.userData.role > "1" && req.params.id != undefined) {
+        id = req.params.id as string;
+    } else if (req.params.id === undefined || req.params.id === req.userData.userId) {
         id = req.userData.userId;
     } else {
-        res.status(400).json({ error: 'Requête invalide' });
+        res.status(403).json({ error: 'Vous ne pouvez pas modifier cet utilisateur' });
         return;
     }
-
     const userToUpdate = await userRepository.getUserById(id);
     if (!userToUpdate) {
         res.status(404).json({ error: 'Utilisateur non trouvé' });
@@ -113,11 +112,10 @@ export const GetAllUsers = async (req: Request, res: Response): Promise<void> =>
 };
 
 export const GetUserById = async (req: CustomRequest, res: Response): Promise<void> => {
-    let id = req.query?.id as string | undefined;
-    console.log("id", id);
+    let id = req?.params?.id as string;
 
-    if (req.userData && req.userData.role > "0" && req.params.id !== undefined) {
-        id = req.params.id;
+    if (req.userData && req.userData.role > "0" && req?.params?.id !== undefined) {
+        id = req?.params?.id as string;
     } else if (id === undefined && req.userData) {
         id = req.userData.userId;
     } else {

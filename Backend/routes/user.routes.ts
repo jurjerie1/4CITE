@@ -179,8 +179,10 @@ userRoutes.post("/login", validatePost(schemas.login), Login);
  *         name: id
  *         description: ID de l'utilisateur à mettre à jour (optionnel, utilise l'ID de l'utilisateur authentifié par défaut)
  *         required: false
+ *         allowEmptyValue: true
  *         schema:
  *           type: string
+ *           default: null
  *     requestBody:
  *       required: true
  *       content:
@@ -262,10 +264,12 @@ userRoutes.get("/getAll", auth, employe, GetAllUsers);
  *     parameters:
  *       - in: path
  *         name: id
- *         description: ID de l'utilisateur à récupérer (optionnel, utilise l'ID de l'utilisateur authentifié par défaut)
+ *         description: ID de l'utilisateur à mettre à jour (optionnel, utilise l'ID de l'utilisateur authentifié par défaut)
  *         required: false
+ *         allowEmptyValue: true
  *         schema:
  *           type: string
+ *           default: ""
  *     responses:
  *       200:
  *         description: Informations de l'utilisateur
