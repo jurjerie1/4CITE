@@ -2,9 +2,13 @@ import request from "supertest";
 import { app, server } from "../index";
 import { User } from "../models/user";
 import mongoose from "mongoose";
+import { connectDB } from "../utils/connectDB";
 import bcrypt from "bcrypt";
 
 describe("User Account Management", () => {
+    beforeAll(async () => {
+        await connectDB(); // Attendre la connexion avant de lancer les tests
+    });
     // Variables pour stocker les tokens
     let userToken = "";
     let employeeToken = "";
@@ -240,7 +244,7 @@ describe("User Account Management", () => {
         });
     });
 
-   
+
 
     describe("User Deletion Tests", () => {
         it("should allow user to delete their own account", async () => {
@@ -254,13 +258,13 @@ describe("User Account Management", () => {
                     role: 0
                 });
             const tempToken = tempUser.body.token;
-            
+
             // L'utilisateur supprime son compte
             const deleteRes = await request(app)
                 .delete("/api/users")
                 .set("Authorization", `Bearer ${tempToken}`);
             expect(deleteRes.statusCode).toEqual(200);
-            
+
             // Vérifier que le compte est supprimé
             const loginAttempt = await request(app)
                 .post("/api/users/login")
@@ -282,11 +286,11 @@ describe("User Account Management", () => {
                     role: 0
                 });
             const tempId = tempUser.body.user._id;
-            
+
             // Tenter de supprimer un autre compte
             // Note: Cette fonctionnalité n'existe peut-être pas dans votre API actuelle
             // L'implémentation doit être ajustée selon votre API
-            
+
             // Vérifier que le compte existe toujours
             const userCheck = await request(app)
                 .get(`/api/users?id=${tempId}`)
