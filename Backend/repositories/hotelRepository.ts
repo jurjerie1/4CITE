@@ -1,5 +1,5 @@
 import { IHotel } from "../models/Hotel.ts";
-import { Model,Document } from "mongoose";
+import { Model, Document } from "mongoose";
 
 class HotelRepository {
 
@@ -9,8 +9,8 @@ class HotelRepository {
         this.model = model;
     }
 
-    public async getHotels(): Promise<IHotel[]> {
-        return await this.model.find();
+    public async getHotels(limit: number = 10): Promise<IHotel[]> {
+        return await this.model.find().limit(limit);
     }
 }
 
