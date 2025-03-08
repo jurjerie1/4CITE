@@ -12,5 +12,7 @@ const hotelRoutes = Router();
  */
 
 
-hotelRoutes.get("/register", auth, GetAll);
+hotelRoutes.get("/", auth, GetAll);
 
+
+export default hotelRoutes;
