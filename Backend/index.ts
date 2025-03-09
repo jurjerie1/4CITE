@@ -21,6 +21,7 @@ connectDB();
 
 app.use('/api/users', userRoutes);
 app.use("/api/hotels", hotelRoutes)
+app.use("/public", express.static('./public/uploads'));
 setupSwagger(app);
 
 const server = app.listen(3000, () => {

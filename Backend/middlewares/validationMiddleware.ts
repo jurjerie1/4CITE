@@ -1,3 +1,4 @@
+import { create } from 'domain';
 import { Request, Response, NextFunction } from 'express';
 import Joi, { ObjectSchema, ValidationResult } from 'joi';
 
@@ -56,6 +57,7 @@ import Joi, { ObjectSchema, ValidationResult } from 'joi';
  */
 export const validatePost = (schema: Joi.ObjectSchema) => {
     return (req: Request, res: Response, next: NextFunction): void => {
+      console.log(req.body);
       const { error } = schema.validate(req.body);
       
       if (error) {
@@ -118,5 +120,12 @@ export const schemas = {
       pseudo: Joi.string(),
       password: Joi.string(),
       role: Joi.number().default(null),
+    }),
+
+    // hotels
+    createHotel: Joi.object({
+      name: Joi.string().required(),
+      location: Joi.string().required(),
+      description: Joi.string().required()
     }),
 };

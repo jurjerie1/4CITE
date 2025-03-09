@@ -15,7 +15,6 @@ export const auth = (req: CustomRequest, res: Response, next: NextFunction): voi
 
         const token = authorizationHeader.split(' ')[1];
         const decodedToken: IDecodedToken = jwt.verify(token, String(process.env.JWT_KEY)) as IDecodedToken;
-        console.log(decodedToken);
         if (!decodedToken || !decodedToken.userId) {
             throw new Error('Invalid token');
         }
@@ -40,7 +39,6 @@ export const employe = (req: CustomRequest, res: Response, next: NextFunction): 
 
 export const admin = (req: CustomRequest, res: Response, next: NextFunction): void => {
     const userRole = Number(req.userData?.role);
-
     if (!isNaN(userRole) && userRole > 1) {
         next();
     } else {
