@@ -8,13 +8,25 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    services:
+      mongodb:
+        image: mongo:latest
+        env:
+          MONGO_INITDB_ROOT_USERNAME: admin
+          MONGO_INITDB_ROOT_PASSWORD: secret
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand({ ping: 1 })'" 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
 
     steps:
     - name: Checkout Repository
@@ -31,7 +43,22 @@ jobs:
       run: npm ci
       working-directory: ./Backend
 
+    - name: Wait for MongoDB to be Ready
+      run: |
+        echo "🕒 Attente de MongoDB..."
+        for i in {1..30}; do
+          if mongosh "mongodb://admin:secret@localhost:27017" --eval "db.runCommand({ ping: 1 })" &>/dev/null; then
+            echo "MongoDB est prêt !"
+            exit 0
+          fi
+          echo MongoDB pas encore prêt... Attente de 2s"
+          sleep 2
+        done
+        echo "MongoDB n'a pas démarré à temps."
+        exit 1
+
     - name: Run Tests
       run: NODE_OPTIONS='--experimental-vm-modules' npx jest --runInBand
       working-directory: ./Backend
-      
+      env:
+        MONGO_URI: mongodb://admin:secret@localhost:27017/testdb
