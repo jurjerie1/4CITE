@@ -1,3 +1,4 @@
+import { create } from 'domain';
 import { Request, Response, NextFunction } from 'express';
 import Joi, { ObjectSchema, ValidationResult } from 'joi';
 
@@ -118,5 +119,13 @@ export const schemas = {
       pseudo: Joi.string(),
       password: Joi.string(),
       role: Joi.number().default(null),
+    }),
+
+    // hotels
+    createHotel: Joi.object({
+      name: Joi.string().required(),
+      location: Joi.string().required(),
+      description: Joi.string().required(),
+      images : Joi.allow(null),
     }),
 };

@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import userRoutes from "./routes/user.routes";
+import hotelRoutes from "./routes/hotel.routes";
 import { connectDB } from "./utils/connectDB";
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
@@ -17,8 +18,10 @@ dotenv.config();
 app.use(cors());
 app.use(express.json());
 connectDB();
-app.use('/api/users', userRoutes);
 
+app.use('/api/users', userRoutes);
+app.use("/api/hotels", hotelRoutes)
+app.use("/public", express.static('./public/uploads'));
 setupSwagger(app);
 
 const server = app.listen(3000, () => {

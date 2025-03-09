@@ -2,7 +2,7 @@ import { Model, Document } from 'mongoose';
 import { IUser } from '../models/user.ts';
 import bcrypt from "bcrypt";
 
- class UserRepository {
+class UserRepository {
     private model: Model<Document & IUser>;
 
     constructor(model: Model<Document & IUser>) {
@@ -18,13 +18,13 @@ import bcrypt from "bcrypt";
 
         return null;
     }
-    
+
     createUser(user: IUser): Promise<IUser> {
         return this.model.create(user);
     }
 
     async findUserByEmail(email: String): Promise<IUser | null> {
-        return this.model.findOne({email});
+        return this.model.findOne({ email });
     }
 
     async updateUser(id: string, user: IUser): Promise<IUser | null> {
@@ -34,7 +34,7 @@ import bcrypt from "bcrypt";
     async getUserById(id: string): Promise<IUser | null> {
         return await this.model.findById(id, "-password").exec();
     }
-    async  getAllUsers(): Promise<IUser[]> {
+    async getAllUsers(): Promise<IUser[]> {
         return await this.model.find().select('-password').exec();
     }
     deleteUser(id: string): Promise<IUser | null> {
