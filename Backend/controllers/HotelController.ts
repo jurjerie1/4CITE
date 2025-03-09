@@ -13,11 +13,9 @@ const hotelRepository = new HotelRepository(Hotel);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Configuration de multer pour stocker temporairement les fichiers
 const tempStorage = multer.diskStorage({
     destination: function (req, file, cb) {
         const tempDir = path.join(__dirname, '/public/uploads/temp');
-        // Créer le dossier s'il n'existe pas
         if (!fs.existsSync(tempDir)) {
             fs.mkdirSync(tempDir, { recursive: true });
         }
@@ -28,7 +26,6 @@ const tempStorage = multer.diskStorage({
     }
 });
 
-// Filtre pour accepter uniquement les images
 const fileFilter = (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
         cb(null, true);
@@ -39,22 +36,19 @@ const fileFilter = (req, file, cb) => {
 
 export const upload = multer({
     storage: tempStorage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+    limits: { fileSize: 5 * 1024 * 1024 }, 
     fileFilter: fileFilter
 });
 
-// Fonction pour déplacer les fichiers vers le dossier final
 const moveFilesToFinalDestination = (files, hotelId) => {
     const finalDir = path.join(__dirname, `../public/uploads/${hotelId}`);
 
-    // Créer le dossier final s'il n'existe pas
     if (!fs.existsSync(finalDir)) {
         fs.mkdirSync(finalDir, { recursive: true });
     }
 
     const newPaths = [];
 
-    // Déplacer chaque fichier
     files.forEach(file => {
         const newPath = path.join(finalDir, path.basename(file.path) + "." + file.originalname.split('.')[1]);
         fs.renameSync(file.path, newPath);
@@ -67,7 +61,7 @@ const moveFilesToFinalDestination = (files, hotelId) => {
 const GetPictureList = (hotels : IHotel[]) => {
     return hotels.map(hotel => {
         hotel = hotel.toObject();
-            hotel.picture_list = []; // Initialiser picture_list
+            hotel.picture_list = []; 
             const finalDir = path.join(__dirname, `../public/uploads/${hotel._id}`);
             if (fs.existsSync(finalDir)) {
                 const files = fs.readdirSync(finalDir);
@@ -89,13 +83,11 @@ export const Create = async (req: Request, res: Response): Promise<void> => {
             res.status(400).json({ error: "Un hôtel avec ce nom existe déjà" });
             return;
         }
-        
+
         let uploadedFiles = [];
-        // Récupérer les fichiers selon la configuration multer utilisée
         if (req.files && Array.isArray(req.files)) {
             uploadedFiles = req.files;
         } else if (req.files) {
-            // Pour upload.fields
             const files = req.files as { [fieldname: string]: Express.Multer.File[] };
             Object.keys(files).forEach(field => {
                 uploadedFiles = [...uploadedFiles, ...files[field]];
@@ -104,10 +96,8 @@ export const Create = async (req: Request, res: Response): Promise<void> => {
             uploadedFiles = [req.file];
         }
 
-        // Créer d'abord l'hôtel pour obtenir son ID
         const newHotel = await hotelRepository.createHotel(hotel);
         let finalPaths = [];
-        // Si nous avons des fichiers, les déplacer vers le dossier final
         if (uploadedFiles.length > 0 && newHotel._id) {
             finalPaths = moveFilesToFinalDestination(uploadedFiles, newHotel._id);
         }
@@ -116,14 +106,12 @@ export const Create = async (req: Request, res: Response): Promise<void> => {
     } catch (error) {
         console.error("Error creating hotel:", error);
 
-        // Si une erreur survient, essayer de supprimer les fichiers temporaires
         if (req.file) {
             fs.unlinkSync(req.file.path);
         } else if (req.files) {
             if (Array.isArray(req.files)) {
                 req.files.forEach(file => fs.unlinkSync(file.path));
             } else {
-                // Pour upload.fields
                 const files = req.files as { [fieldname: string]: Express.Multer.File[] };
                 Object.keys(files).forEach(field => {
                     files[field].forEach(file => fs.unlinkSync(file.path));

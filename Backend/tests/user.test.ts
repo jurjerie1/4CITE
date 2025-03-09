@@ -3,13 +3,13 @@ import { app, server } from "../index";
 import { User } from "../models/user";
 import mongoose from "mongoose";
 import { connectDB } from "../utils/connectDB";
-import bcrypt from "bcrypt";
 
 describe("User Account Management", () => {
     beforeAll(async () => {
-        await connectDB(); // Attendre la connexion avant de lancer les tests
+        await connectDB(); 
     });
-    // Variables pour stocker les tokens
+
+
     let userToken = "";
     let employeeToken = "";
     let adminToken = "";
@@ -18,7 +18,6 @@ describe("User Account Management", () => {
     let adminId = "";
 
     describe("User Registration", () => {
-        // Test de création /register
         it("should register regular user", async () => {
             const res = await request(app)
                 .post("/api/users/register")
@@ -133,7 +132,6 @@ describe("User Account Management", () => {
             const res = await request(app)
                 .get("/api/users/getAll")
                 .set("Authorization", `Bearer ${userToken}`);
-            // La réponse dépend de votre implémentation, mais devrait être un code d'erreur
             expect(res.statusCode).not.toEqual(200);
         });
     });
@@ -167,7 +165,6 @@ describe("User Account Management", () => {
             const res = await request(app)
                 .get(`/api/users/${employeeId}`)
                 .set("Authorization", `Bearer ${userToken}`);
-            // La réponse dépend de votre implémentation, mais devrait être un code d'erreur
             expect(res.statusCode).not.toEqual(200);
         });
     });
@@ -224,8 +221,6 @@ describe("User Account Management", () => {
                 .send({
                     role: 2
                 });
-            // La réponse dépend de votre implémentation
-            // Assurez-vous que le rôle n'a pas été modifié
             const userCheck = await request(app)
                 .get(`/api/users?id=${userId}`)
                 .set("Authorization", `Bearer ${employeeToken}`);
@@ -239,7 +234,6 @@ describe("User Account Management", () => {
                 .send({
                     pseudo: "attemptToModify"
                 });
-            // La réponse dépend de votre implémentation, mais devrait être un code d'erreur
             expect(res.statusCode).toEqual(403);
         });
     });
