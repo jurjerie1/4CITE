@@ -53,6 +53,7 @@ const userRoutes = Router();
  *     summary: Enregistrer un nouvel utilisateur
  *     tags: [Utilisateurs]
  *     description: Crée un nouvel utilisateur avec un email, un pseudo et un mot de passe
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
@@ -118,6 +119,7 @@ userRoutes.post("/register", validatePost(schemas.register), Register);
  *     summary: Authentifier un utilisateur
  *     tags: [Utilisateurs]
  *     description: Authentifie un utilisateur avec son email et son mot de passe
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
