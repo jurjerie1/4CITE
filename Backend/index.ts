@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import userRoutes from "./routes/user.routes";
+import hotelRoutes from "./routes/hotel.routes";
 import { connectDB } from "./utils/connectDB";
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
@@ -8,7 +9,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { setupSwagger } from "./swagger";
-import hotelRoutes from "routes/hotel.routes";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

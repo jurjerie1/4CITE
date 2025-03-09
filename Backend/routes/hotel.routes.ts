@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { admin, auth, employe } from "../middlewares/authentification.ts";
-import { Create, GetAll } from "controllers/HotelController.ts";
-import { schemas, validatePost } from "middlewares/validationMiddleware.ts";
+import { Create, DeleteFile, DeleteHotel, GetAll, GetHotelById, UpdateHotel, UploadFileForHotel } from "../controllers/HotelController.ts";
+import { schemas, validatePost } from "../middlewares/validationMiddleware.ts";
 import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -66,8 +66,20 @@ const upload = multer({ dest: path.join(__dirname, '../public/uploads') });
  *           minimum: 1
  *         description: Nombre maximum d'hôtels à retourner (10 par défaut)
  *         required: false
- *     security:
- *       - bearerAuth: []
+ *       - in: query
+ *         name: date
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Date de disponibilité
+ *         required: false
+ *       - in: query
+ *         name: location
+ *         schema:
+ *           type: string
+ *         description: Emplacement de l'hôtel
+ *         required: false
+ *     security: []
  *     responses:
  *       "200":
  *         description: Liste des hôtels
@@ -84,7 +96,7 @@ const upload = multer({ dest: path.join(__dirname, '../public/uploads') });
  *       "500":
  *         description: Erreur serveur interne
  */
-hotelRoutes.get("/", auth, GetAll);
+hotelRoutes.get("/", GetAll);
 
 /**
  * @swagger
@@ -133,4 +145,194 @@ hotelRoutes.get("/", auth, GetAll);
 
 hotelRoutes.post("/", auth, admin, upload.array('images'), validatePost(schemas.createHotel), Create);
 
+
+/**
+ * @swagger
+ * /api/hotels/{id}/upload:
+ *   post:
+ *     summary: Ajouter des images à un hôtel
+ *     tags: [Hôtels]
+ *     description: Ajoute des images à un hôtel existant
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de l'hôtel
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *                 description: Images à ajouter
+ *     responses:
+ *       "201":
+ *         description: Images ajoutées avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: string
+ *                 format: uri
+ *                 description: URL des images ajoutées
+ *       "400":
+ *         description: Paramètre de requête invalide
+ *       "401":
+ *         description: Non autorisé
+ *       "404":
+ *         description: Hôtel non trouvé
+ *       "500":
+ *         description: Erreur serveur interne
+ */
+hotelRoutes.post("/:id/upload", auth, admin, upload.array('images'), UploadFileForHotel);
+
+/**
+ * @swagger
+ * /api/hotels/{id}:
+ *   delete:
+ *     summary: Supprimer un hôtel
+ *     tags: [Hôtels]
+ *     description: Supprime un hôtel existant de la base de données
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de l'hôtel
+ *     responses:
+ *       "200":
+ *         description: Hôtel supprimé avec succès
+ *       "400":
+ *         description: Paramètre de requête invalide
+ *       "401":
+ *         description: Non autorisé
+ *       "404":
+ *         description: Hôtel non trouvé
+ *       "500":
+ *         description: Erreur serveur interne
+ */
+hotelRoutes.delete("/:id", auth, admin, DeleteHotel);
+
+/**
+ * @swagger
+ * /api/hotels/{hotelId}/{fileId}:
+ *   delete:
+ *     summary: Supprimer un fichier d'un hôtel
+ *     tags: [Hôtels]
+ *     description: Supprime un fichier d'un hôtel existant
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: hotelId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de l'hôtel
+ *       - in: path
+ *         name: fileId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID du fichier
+ *     responses:
+ *       "200":
+ *         description: Fichier supprimé avec succès
+ *       "400":
+ *         description: Paramètre de requête invalide
+ *       "401":
+ *         description: Non autorisé
+ *       "404":
+ *         description: Fichier non trouvé
+ *       "500":
+ *         description: Erreur serveur interne
+ */
+hotelRoutes.delete("/:hotelId/:fileId", auth, admin, DeleteFile);
+
+
+/**
+ * @swagger
+ * /api/hotels/{id}:
+ *   put:
+ *     summary: Mettre à jour un hôtel
+ *     tags: [Hôtels]
+ *     description: Met à jour un hôtel existant dans la base de données
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de l'hôtel
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Hotel'
+ *     responses:
+ *       "200":
+ *         description: Hôtel mis à jour avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Hotel'
+ *       "400":
+ *         description: Paramètre de requête invalide
+ *       "401":
+ *         description: Non autorisé
+ *       "404":
+ *         description: Hôtel non trouvé
+ *       "500":
+ *         description: Erreur serveur interne
+ */
+hotelRoutes.put("/:id", auth, admin, validatePost(schemas.createHotel), UpdateHotel);
+
+
+/**
+ * @swagger
+ * /api/hotels/{id}:
+ *   get:
+ *     summary: Récupérer un hôtel
+ *     tags: [Hôtels]
+ *     description: Retourne un hôtel en fonction de son ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de l'hôtel
+ *     security: []
+ *     responses:
+ *       "200":
+ *         description: Hôtel trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Hotel'
+ *       "400":
+ *         description: Paramètre de requête invalide
+ *       "404":
+ *         description: Hôtel non trouvé
+ *       "500":
+ *         description: Erreur serveur interne
+ */
+hotelRoutes.get("/:id",  GetHotelById);
 export default hotelRoutes;

@@ -57,7 +57,6 @@ import Joi, { ObjectSchema, ValidationResult } from 'joi';
  */
 export const validatePost = (schema: Joi.ObjectSchema) => {
     return (req: Request, res: Response, next: NextFunction): void => {
-      console.log(req.body);
       const { error } = schema.validate(req.body);
       
       if (error) {
