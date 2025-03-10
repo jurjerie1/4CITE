@@ -128,4 +128,11 @@ export const schemas = {
       description: Joi.string().required(),
       images : Joi.allow(null),
     }),
+
+    // bookings
+    createBooking: Joi.object({
+      startDate: Joi.date().required(),
+      endDate: Joi.date().required(),
+      nbPerson: Joi.number().required().min(1),
+    }),
 };

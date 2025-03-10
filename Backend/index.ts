@@ -9,7 +9,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { setupSwagger } from "./swagger";
-import bookingRoutes from "routes/booking.routes";
+import bookingRoutes from "./routes/booking.routes";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
