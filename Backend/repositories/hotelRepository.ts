@@ -68,6 +68,10 @@ class HotelRepository {
     public async deleteHotel(id: string): Promise<IHotel | null> {
         return await this.model.findByIdAndDelete(id);
     }
+
+    public async getHotelById(id: string): Promise<IHotel | null> {
+        return await this.model.findById(id);
+    }
 }
 
 export default HotelRepository;

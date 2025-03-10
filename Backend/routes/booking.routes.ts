@@ -1,7 +1,7 @@
 import { CreateBooking, DeleteBooking, GetAllBookings, GetAllBookingsByUser, UpdateBooking } from "../controllers/BookingController";
 import { Router } from "express";
 import { admin, auth } from "../middlewares/authentification";
-import { schemas, validatePost, validatePut } from "middlewares/validationMiddleware";
+import { schemas, validatePost, validatePut } from "../middlewares/validationMiddleware";
 
 const BookingRoutes = Router();
 

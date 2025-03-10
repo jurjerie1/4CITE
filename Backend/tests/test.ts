@@ -7,6 +7,7 @@ import { Hotel } from "../models/Hotel";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
+import { Booking } from "../models/Booking";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,6 +24,10 @@ describe("Test API", () => {
     let userId = "";
     let employeeId = "";
     let adminId = "";
+    var hotelId = "";
+    var hotelId2 = "";
+
+
     describe("User's Tests", () => {
         describe("User Registration", () => {
             it("should register regular user", async () => {
@@ -293,8 +298,8 @@ describe("Test API", () => {
     });
 
     describe("Hotel's Tests", () => {
-        var hotelId = "";
         var imageId = "";
+
         describe("Hotel Creation", () => {
 
             it("should create a new hotel with multiple images and admin role", async () => {
@@ -321,7 +326,7 @@ describe("Test API", () => {
                     .field("description", "Hotel description")
                     .field("location", "Paris")
                     .attach("images", path.join(__dirname, "./room1.png"))
-
+                hotelId2 = res.body[0]._id.toString();
                 expect(res.status).toBe(201);
                 expect(res.body[0].name).toBe("Hotel admin with one image");
             });
@@ -400,7 +405,6 @@ describe("Test API", () => {
         });
 
         describe("Get Hotels", () => {
-
             it("should get all hotels without authentication", async () => {
                 const res = await request(app)
                     .get("/api/hotels")
@@ -423,14 +427,6 @@ describe("Test API", () => {
                 expect(res.body.length).toBe(1);
             });
 
-            //! A finir 
-            it("should get all hotels with date", async () => {
-                const res = await request(app)
-                    .get("/api/hotels?date=2022-01-01")
-                expect(res.status).toBe(200);
-                expect(Array.isArray(res.body)).toBe(true);
-                expect(res.body.length).toBe(0);
-            });
 
             it("should get all hotels with limit and location", async () => {
                 const res = await request(app)
@@ -439,30 +435,7 @@ describe("Test API", () => {
                 expect(Array.isArray(res.body)).toBe(true);
                 expect(res.body.length).toBe(2);
             });
-
-            it("should get all hotels with limit and date", async () => {
-                const res = await request(app)
-                    .get("/api/hotels?limit=2&date=2022-01-01")
-                expect(res.status).toBe(200);
-                expect(Array.isArray(res.body)).toBe(true);
-                expect(res.body.length).toBe(0);
-            });
-
-            it("should get all hotels with location and date", async () => {
-                const res = await request(app)
-                    .get("/api/hotels?location=Paris&date=2022-01-01")
-                expect(res.status).toBe(200);
-                expect(Array.isArray(res.body)).toBe(true);
-                expect(res.body.length).toBe(0);
-            });
-
-            it("should get all hotels with limit, location and date", async () => {
-                const res = await request(app)
-                    .get("/api/hotels?limit=2&location=Paris&date=2022-01-01")
-                expect(res.status).toBe(200);
-                expect(Array.isArray(res.body)).toBe(true);
-                expect(res.body.length).toBe(0);
-            });
+            
         });
 
         describe("Update Hotel", () => {
@@ -514,7 +487,6 @@ describe("Test API", () => {
 
                     });
                 expect(res.status).toBe(404);
-                console.log(res.body);
             });
 
             it("should not update hotel with duplicate name", async () => {
@@ -543,9 +515,7 @@ describe("Test API", () => {
         describe("Delete Hotel", () => {
 
             it("should delete file with admin role", async () => {
-                console.log(imageId);
                 const localImageId = imageId.split("/")[3];
-                console.log(localImageId);
                 const res = await request(app)
                     .delete(`/api/hotels/${hotelId}/${localImageId}`)
                     .set("Authorization", `Bearer ${adminToken}`)
@@ -583,16 +553,197 @@ describe("Test API", () => {
             });
 
         });
+    });
 
+        describe("Booking's Tests", () => {
+            var bookingId = "";
+            var bookingId2 = "";
+            describe("Booking Creation", () => {
+            it("should book a hotel with user role", async () => {
+                const res = await request(app)
+                    .post(`/api/bookings/${hotelId2}`)
+                    .set("Authorization", `Bearer ${userToken}`)
+                    .send({
+                        startDate: "2025-01-01",
+                        endDate: "2025-01-02",
+                        nbPerson: 2
+                    });
+    
+                bookingId = res.body.booking._id;
+                expect(res.status).toBe(201);
+                expect(res.body.booking).toMatchObject({
+                    StartDate: "2025-01-01T00:00:00.000Z",
+                    EndDate: "2025-01-02T00:00:00.000Z",
+                    nbPerson: 2
+                });
+    
+                expect(res.body.booking.user).toHaveProperty("_id", userId);
+    
+                expect(res.body).toHaveProperty("message", "La réservation a été créée avec succès");
+            });
+
+            it("should get all bookings with user role", async () => {
+                const res = await request(app)
+                    .get(`/api/bookings/users`)
+                    .set("Authorization", `Bearer ${userToken}`)
+                expect(res.status).toBe(200);
+                expect(Array.isArray(res.body)).toBe(true);
+                expect(res.body.length).toBe(1);
+                expect(res.body[0]).toHaveProperty("_id", bookingId);
+            });
+
+            it("should book a hotel with employee role", async () => {
+                const res = await request(app)
+                    .post(`/api/bookings/${hotelId2}`)
+                    .set("Authorization", `Bearer ${employeeToken}`)
+                    .send({
+                        startDate: "2026-01-01",
+                        endDate: "2026-01-02",
+                        nbPerson: 2
+                    });
+                expect(res.status).toBe(201);
+                bookingId2 = res.body.booking._id;
+                expect(res.body).toHaveProperty("message", "La réservation a été créée avec succès");
+            });
+            it("should not get all bookings with employee role", async () => {
+                const res = await request(app)
+                    .get(`/api/bookings/users`)
+                    .set("Authorization", `Bearer ${employeeToken}`)
+                expect(res.status).toBe(200);
+                expect(Array.isArray(res.body)).toBe(true);
+                expect(res.body.length).toBe(1);
+                expect(res.body[0].user).toHaveProperty("_id", employeeId);
+            });
+        });
+        describe("Booking Update", () => {
+            it("should update booking with user role", async () => {
+                const res = await request(app)
+                    .put(`/api/bookings/${bookingId}`)
+                    .set("Authorization", `Bearer ${userToken}`)
+                    .send({
+                        startDate: "2025-01-03",
+                        endDate: "2025-01-04",
+                        nbPerson: 3
+                    });
+                expect(res.status).toBe(200);
+                expect(res.body).toHaveProperty("message", "La réservation a été mise à jour avec succès");
+            });
+            it("should update booking with employee role", async () => {
+                const res = await request(app)
+                    .put(`/api/bookings/${bookingId2}`)
+                    .set("Authorization", `Bearer ${employeeToken}`)
+                    .send({
+                        startDate: "2026-01-03",
+                        endDate: "2026-01-04",
+                        nbPerson: 3
+                    });
+                expect(res.status).toBe(200);
+                expect(res.body).toHaveProperty("message", "La réservation a été mise à jour avec succès");
+            });
+
+            it("should not update booking with user role", async () => {
+                const res = await request(app)
+                    .put(`/api/bookings/${bookingId2}`)
+                    .set("Authorization", `Bearer ${userToken}`)
+                    .send({
+                        startDate: "2026-01-02",
+                        endDate: "2026-01-03",
+                        nbPerson: 3
+                    });
+                expect(res.status).toBe(401);
+            });
+
+            it("should not update booking with employee role", async () => {
+                const res = await request(app)
+                    .put(`/api/bookings/${bookingId}`)
+                    .set("Authorization", `Bearer ${employeeToken}`)
+                    .send({
+                        startDate: "2025-01-02",
+                        endDate: "2025-01-03",
+                        nbPerson: 3
+                    });
+                expect(res.status).toBe(401);
+            });
+
+            it("should update booking with admin role", async () => {
+                const res = await request(app)
+                    .put(`/api/bookings/${bookingId}`)
+                    .set("Authorization", `Bearer ${adminToken}`)
+                    .send({
+                        startDate: "2025-01-02",
+                        endDate: "2025-01-03",
+                        nbPerson: 3
+                    });
+                expect(res.status).toBe(200);
+                expect(res.body).toHaveProperty("message", "La réservation a été mise à jour avec succès");
+            });
+        });
+
+        describe("Hotel Get Bookings", () => {
+            it("should get all hotels with date", async () => {
+                const res = await request(app)
+                    .get("/api/hotels?startDate=2025-01-02")
+                expect(res.status).toBe(200);
+                expect(Array.isArray(res.body)).toBe(true);
+                expect(res.body.length).toBe(3);
+            });
+
+            it("should get all hotels with limit and date", async () => {
+                const res = await request(app)
+                    .get("/api/hotels?limit=2&startDate=2025-01-02")
+                expect(res.status).toBe(200);
+                expect(Array.isArray(res.body)).toBe(true);
+                expect(res.body.length).toBe(2);
+            });
+
+            it("should get all hotels with location and date", async () => {
+                const res = await request(app)
+                    .get("/api/hotels?location=Paris&startDate=2027-01-02")
+                expect(res.status).toBe(200);
+                expect(Array.isArray(res.body)).toBe(true);
+                expect(res.body.length).toBe(3);
+            });
+
+            it("should get all hotels with limit, location and date", async () => {
+                const res = await request(app)
+                    .get("/api/hotels?limit=2&location=Paris&date=2027-01-01")
+                expect(res.status).toBe(200);
+                expect(Array.isArray(res.body)).toBe(true);
+                expect(res.body.length).toBe(2);
+            });
+        });
+        
+        describe("Booking Deletion", () => {
+            it("should not delete booking with user role", async () => {
+                const res = await request(app)
+                    .delete(`/api/bookings/${bookingId2}`)
+                    .set("Authorization", `Bearer ${userToken}`)
+                expect(res.status).toBe(401);
+            });
+
+            it("should delete booking with user role", async () => {
+                const res = await request(app)
+                    .delete(`/api/bookings/${bookingId}`)
+                    .set("Authorization", `Bearer ${userToken}`)
+                expect(res.status).toBe(200);
+                expect(res.body).toHaveProperty("message", "La réservation a été supprimée avec succès");
+            });
+
+            it("should delete booking with admin role", async () => {
+                const res = await request(app)
+                    .delete(`/api/bookings/${bookingId2}`)
+                    .set("Authorization", `Bearer ${adminToken}`)
+                expect(res.status).toBe(200);
+                expect(res.body).toHaveProperty("message", "La réservation a été supprimée avec succès");
+            });
+        });
     });
 
 
-
     afterAll(async () => {
-
-
         await User.deleteMany({});
         await Hotel.deleteMany({});
+        await Booking.deleteMany({});
         await mongoose.connection.close();
         server.close();
     });
