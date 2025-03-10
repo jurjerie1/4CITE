@@ -36,11 +36,72 @@ class BookingRepository {
         ]);
     }
 
-    async getAllBookings(): Promise<IBooking[]> {
-        return await this.model.find().populate([
-            { path: "user", select: "pseudo email" },
-            { path: "hotel", select: "name location" }
-        ]);
+    async getAllBookings(limit: number = 10, page: number = 1, date: Date | null, userName: string | null, userEmail: string | null, hotelName: string | null): Promise<IBooking[]> {
+
+        const pipeline: any[] = [];
+
+        pipeline.push(
+            { $lookup: { from: "users", localField: "user", foreignField: "_id", as: "userObj" } },
+            { $unwind: "$userObj" },
+            { $lookup: { from: "hotels", localField: "hotel", foreignField: "_id", as: "hotelObj" } },
+            { $unwind: "$hotelObj" }
+        );
+
+        const matchConditions: any = {};
+
+        if (date) {
+            const startOfDay = new Date(date);
+            startOfDay.setHours(0, 0, 0, 0);
+
+
+            matchConditions.$or = [
+                { StartDate: { $gte: startOfDay } }
+            ];
+        }
+
+        if (userName) {
+            matchConditions["userObj.pseudo"] = userName;
+        }
+
+        if (userEmail) {
+            matchConditions["userObj.email"] = userEmail.trim().toLowerCase();
+        }
+
+        if (hotelName) {
+            matchConditions["hotelObj.name"] = new RegExp(hotelName.trim(), "i");
+        }
+
+        if (Object.keys(matchConditions).length > 0) {
+            pipeline.push({ $match: matchConditions });
+        }
+
+        pipeline.push(
+            { $skip: page * limit },
+            { $limit: limit }
+        );
+
+        pipeline.push({
+            $project: {
+                _id: 1,
+                StartDate: 1,
+                EndDate: 1,
+                nbPerson: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                user: {
+                    _id: "$userObj._id",
+                    pseudo: "$userObj.pseudo",
+                    email: "$userObj.email"
+                },
+                hotel: {
+                    _id: "$hotelObj._id",
+                    name: "$hotelObj.name",
+                    location: "$hotelObj.location"
+                }
+            }
+        });
+
+        return await this.model.aggregate(pipeline);
     }
 
     async getBookingById(id: string): Promise<IBooking | null> {
@@ -52,10 +113,10 @@ class BookingRepository {
 
     async updateBooking(id: string, booking: Partial<IBooking>): Promise<IBooking | null> {
         return await this.model.findByIdAndUpdate
-        (id, booking, { new: true }).populate([
-            { path: "user", select: "pseudo email" },
-            { path: "hotel", select: "name location" }
-        ]);
+            (id, booking, { new: true }).populate([
+                { path: "user", select: "pseudo email" },
+                { path: "hotel", select: "name location" }
+            ]);
     }
 
 }

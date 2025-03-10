@@ -1,6 +1,6 @@
 import { CreateBooking, GetAllBookings, GetAllBookingsByUser } from "../controllers/BookingController";
 import { Router } from "express";
-import { auth } from "../middlewares/authentification";
+import { admin, auth } from "../middlewares/authentification";
 import { schemas, validatePost } from "middlewares/validationMiddleware";
 
 const BookingRoutes = Router();
@@ -119,5 +119,76 @@ BookingRoutes.get("/users", auth, GetAllBookingsByUser);
  *         description: Non autorisé
  */
 BookingRoutes.post("/:hotelId", auth, validatePost(schemas.createBooking), CreateBooking);
+/**
+ * @swagger
+ * /api/bookings/GetAllBookings:
+ *   get:
+ *     summary: Récupérer la liste des réservations
+ *     tags: 
+ *       - Réservations
+ *     description: Retourne la liste de toutes les réservations avec possibilité de filtrer par utilisateur, hôtel et date.
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: Nombre de réservations à récupérer (pagination).
+ *         required: false
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 0
+ *         description: Numéro de la page de résultats (pagination, commence à 0).
+ *         required: false
+ *       - in: query
+ *         name: date
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Récupère les réservations après cette date (format YYYY-MM-DD).
+ *         required: false
+ *       - in: query
+ *         name: userName
+ *         schema:
+ *           type: string
+ *         description: Nom de l'utilisateur pour filtrer les réservations.
+ *         required: false
+ *       - in: query
+ *         name: userEmail
+ *         schema:
+ *           type: string
+ *           format: email
+ *         description: Email de l'utilisateur pour filtrer les réservations.
+ *         required: false
+ *       - in: query
+ *         name: hotelName
+ *         schema:
+ *           type: string
+ *         description: Nom de l'hôtel pour filtrer les réservations.
+ *         required: false
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: La liste des réservations a été récupérée avec succès.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Booking'
+ *       400:
+ *         description: Requête invalide (paramètre incorrect).
+ *       401:
+ *         description: Non autorisé, authentification requise.
+ *       404:
+ *         description: Aucune réservation trouvée.
+ *       500:
+ *         description: Erreur interne du serveur.
+ */
+
+BookingRoutes.get("/GetAllBookings", auth, admin, GetAllBookings);
 
 export default BookingRoutes;
