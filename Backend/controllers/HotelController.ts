@@ -125,17 +125,26 @@ export const Create = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const GetAll = async (req: Request, res: Response): Promise<void> => {
-    const { limit, location, date } = req.query;
+    const { limit, page, location, startDate, endDate } = req.query;
     try {
         const limitNum = limit ? parseInt(limit as string, 10) : 10;
-
-        if (location && typeof location !== 'string') {
-            res.status(400).json({ error: "L'emplacement doit être une chaîne de caractères" });
+        const pageNumber = page ? parseInt(page as string, 10) : 0;
+        if (startDate && typeof startDate !== 'string') {
+            res.status(400).json({ error: "La date de début doit être une chaîne de caractères, format YYYY-MM-DD" });
+            return;
+        }
+        if (endDate && typeof endDate !== 'string') {
+            res.status(400).json({ error: "La date de fin doit être une chaîne de caractères, format YYYY-MM-DD" });
             return;
         }
 
-        if (date && typeof date !== 'string') {
-            res.status(400).json({ error: "La date doit être une chaîne de caractères, format YYYY-MM-DD" });
+        if(startDate && endDate && new Date(startDate as string) > new Date(endDate as string)) {
+            res.status(400).json({ error: "La date de début doit être antérieure à la date de fin" });
+            return;
+        }
+
+        if (location && typeof location !== 'string') {
+            res.status(400).json({ error: "L'emplacement doit être une chaîne de caractères" });
             return;
         }
 
@@ -144,7 +153,7 @@ export const GetAll = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        const hotels = await hotelRepository.getHotels(limitNum, location as string, date as string);
+        const hotels = await hotelRepository.getHotels(limitNum, pageNumber, location as string, startDate as string, endDate as string);
 
         res.status(200).json(GetPictureList(hotels));
     } catch (error) {

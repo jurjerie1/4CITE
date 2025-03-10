@@ -50,7 +50,6 @@ const upload = multer({ dest: path.join(__dirname, '../public/uploads') });
  *           items:
  *             type: string
  */
-
 /**
  * @swagger
  * /api/hotels:
@@ -66,12 +65,26 @@ const upload = multer({ dest: path.join(__dirname, '../public/uploads') });
  *           minimum: 1
  *         description: Nombre maximum d'hôtels à retourner (10 par défaut)
  *         required: false
+  *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 0
+ *         description: Page de résultats à retourner (0 par défaut)
+ *         required: false
  *       - in: query
- *         name: date
+ *         name: startDate
  *         schema:
  *           type: string
  *           format: date
- *         description: Date de disponibilité
+ *         description: Date de début de disponibilité
+ *         required: false
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Date de fin de disponibilité
  *         required: false
  *       - in: query
  *         name: location

@@ -9,6 +9,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { setupSwagger } from "./swagger";
+import bookingRoutes from "./routes/booking.routes";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,6 +22,9 @@ connectDB();
 
 app.use('/api/users', userRoutes);
 app.use("/api/hotels", hotelRoutes)
+app.use("/api/bookings", bookingRoutes);
+
+
 app.use("/public", express.static('./public/uploads'));
 setupSwagger(app);
 
