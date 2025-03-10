@@ -78,3 +78,31 @@ export const CreateBooking = async (req: CustomRequest, res: Response) => {
         res.status(404).json({ message: error.message });
     }
 };
+
+export const UpdateBooking = async (req: CustomRequest, res: Response) => {
+    try {
+        const user = req.userData;
+        const id = req.params.id;
+        const { startDate, endDate, nbPerson } = req.body;
+        const booking = await bookingRepository.getBookingById(id);
+        if (!booking) {
+            res.status(404).json({ message: "La réservation n'a pas été trouvée" });
+            return;
+        }
+
+        if (booking.user.toString() !== user.userId && user.role != "2") {
+            res.status(401).json({ message: "Vous n'êtes pas autorisé à modifier cette réservation" });
+            return;
+        }
+
+        booking.StartDate = startDate || booking.StartDate;
+        booking.EndDate = endDate || booking.EndDate;
+        booking.nbPerson = nbPerson || booking.nbPerson;
+
+        const updatedBooking = await bookingRepository.updateBooking(id, booking);
+
+        res.status(200).json({ message: "La réservation a été mise à jour avec succès", booking: updatedBooking });
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}

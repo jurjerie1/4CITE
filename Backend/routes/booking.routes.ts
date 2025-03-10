@@ -1,7 +1,7 @@
-import { CreateBooking, GetAllBookings, GetAllBookingsByUser } from "../controllers/BookingController";
+import { CreateBooking, GetAllBookings, GetAllBookingsByUser, UpdateBooking } from "../controllers/BookingController";
 import { Router } from "express";
 import { admin, auth } from "../middlewares/authentification";
-import { schemas, validatePost } from "middlewares/validationMiddleware";
+import { schemas, validatePost, validatePut } from "middlewares/validationMiddleware";
 
 const BookingRoutes = Router();
 
@@ -191,4 +191,50 @@ BookingRoutes.post("/:hotelId", auth, validatePost(schemas.createBooking), Creat
 
 BookingRoutes.get("/GetAllBookings", auth, admin, GetAllBookings);
 
+
+/**
+ * @swagger
+ * /api/bookings/{id}:
+ *   put:
+ *     summary: Mettre à jour une réservation
+ *     tags: [Réservations]
+ *     description: Met à jour une réservation
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de la réservation
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               startDate:
+ *                 type: string
+ *                 description: Date de début de la réservation
+ *               endDate:
+ *                 type: string
+ *                 description: Date de fin de la réservation
+ *               nbPerson:
+ *                 type: number
+ *                 description: Nombre de personnes
+ *     responses:
+ *       200:
+ *         description: La réservation a été mise à jour avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Booking'
+ *       400:
+ *         description: La réservation n'a pas été mise à jour
+ *       401:
+ *         description: Non autorisé
+ */
+BookingRoutes.put("/:id?", auth, validatePut(schemas.createBooking), UpdateBooking);
 export default BookingRoutes;
