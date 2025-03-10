@@ -106,3 +106,26 @@ export const UpdateBooking = async (req: CustomRequest, res: Response) => {
         res.status(404).json({ message: error.message });
     }
 }
+
+
+export const DeleteBooking = async (req: CustomRequest, res: Response) => {
+    try {
+        const user = req.userData;
+        const id = req.params.id;
+        const booking = await bookingRepository.getBookingById(id);
+        if (!booking) {
+            res.status(404).json({ message: "La réservation n'a pas été trouvée" });
+            return;
+        }
+
+        if (booking.user.toString() !== user.userId && user.role != "2") {
+            res.status(401).json({ message: "Vous n'êtes pas autorisé à supprimer cette réservation" });
+            return;
+        }
+
+        await bookingRepository.deleteBooking(id);
+        res.status(200).json({ message: "La réservation a été supprimée avec succès" });
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}

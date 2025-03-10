@@ -1,4 +1,4 @@
-import { CreateBooking, GetAllBookings, GetAllBookingsByUser, UpdateBooking } from "../controllers/BookingController";
+import { CreateBooking, DeleteBooking, GetAllBookings, GetAllBookingsByUser, UpdateBooking } from "../controllers/BookingController";
 import { Router } from "express";
 import { admin, auth } from "../middlewares/authentification";
 import { schemas, validatePost, validatePut } from "middlewares/validationMiddleware";
@@ -236,5 +236,32 @@ BookingRoutes.get("/GetAllBookings", auth, admin, GetAllBookings);
  *       401:
  *         description: Non autorisé
  */
-BookingRoutes.put("/:id?", auth, validatePut(schemas.createBooking), UpdateBooking);
+BookingRoutes.put("/:id", auth, validatePut(schemas.createBooking), UpdateBooking);
+
+/**
+ * @swagger
+ * /api/bookings/{id}:
+ *   delete:
+ *     summary: Supprimer une réservation
+ *     tags: [Réservations]
+ *     description: Supprime une réservation
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de la réservation
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: La réservation a été supprimée avec succès
+ *       400:
+ *         description: La réservation n'a pas été supprimée
+ *       401:
+ *         description: Non autorisé
+ */
+BookingRoutes.delete("/:id", auth, DeleteBooking);
+
 export default BookingRoutes;

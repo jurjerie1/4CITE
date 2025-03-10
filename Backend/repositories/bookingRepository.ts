@@ -119,6 +119,12 @@ class BookingRepository {
             ]);
     }
 
+    async deleteBooking(id: string): Promise<IBooking | null> {
+        return await this.model.findByIdAndDelete(id).populate([
+            { path: "user", select: "pseudo email" },
+            { path: "hotel", select: "name location" }
+        ]);
+    }
 }
 
 export default BookingRepository;
