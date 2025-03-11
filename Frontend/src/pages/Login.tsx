@@ -53,7 +53,7 @@ const Login: React.FC = () => {
                                 required
                             />
                         </div>
-                        <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded">Connexion</button>
+                        <button type="submit" className="w-full bg-black text-white py-2 rounded">Connexion</button>
                         {message && <p className="mt-4 text-center text-red-500">{message}</p>}
                         <p className="mt-2 text-center">Pas encore de compte ? <a href="/register">S'inscrire</a></p>
                     </form>

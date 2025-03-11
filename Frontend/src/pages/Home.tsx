@@ -75,7 +75,7 @@ const Home = () => {
                                 <div className="text-center text-black px-4">
                                     <h1 className="text-5xl font-light mb-2">{slide.title}</h1>
                                     <p className="text-xl mb-8">{slide.description}</p>
-                                    <a href="#reservation" className="header-button px-8 py-3 rounded-sm hover:bg-gold-500 hover:text-white transition-colors">
+                                    <a href="#reservation" className="bg-black text-white px-8 py-3 rounded-sm hover:bg-gold-500 hover:text-white transition-colors">
                                         Réserver
                                     </a>
                                 </div>
@@ -97,6 +97,14 @@ const Home = () => {
                 <div className="relative mx-auto -mt-16 max-w-4xl px-4">
                     <div id="reservation" className="bg-white rounded-lg shadow-xl p-6">
                         <h2 className="text-2xl font-light text-center mb-6">Réservez votre séjour</h2>
+                        <div className="text-center mb-2 grid grid-cols-1 md:grid-cols-1">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Dans quel hôtel ?</label>
+                            <select className="w-full p-2 border border-gray-300 rounded">
+                                <option>Tours</option>
+                                <option>Caen</option>
+                                <option>Je sais pas frère</option>
+                            </select>
+                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Arrivée</label>
@@ -124,7 +132,7 @@ const Home = () => {
                                 </select>
                             </div>
                             <div className="flex items-end">
-                                <button className="w-full bg-gold-500 text-white p-2 rounded hover:bg-gold-600 transition-colors">
+                                <button className="w-full bg-gold-500 text-white bg-black p-2 rounded hover:bg-gold-600 transition-colors">
                                     Vérifier disponibilité
                                 </button>
                             </div>
