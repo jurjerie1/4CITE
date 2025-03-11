@@ -27,7 +27,15 @@ jobs:
     - name: Install Dependencies
       run: npm ci
       working-directory: ./Backend
+    - name: Run Security Audit
+      run: npm audit --audit-level=critical
       
     - name: Run Tests
       run: NODE_OPTIONS='--experimental-vm-modules' npx jest --runInBand
       working-directory: ./Backend
+
+    - name: Build Solution
+      run: npm run build
+        
+    - name: Deploy (Fake Deployment)
+      run: echo "Deploying solution..."
