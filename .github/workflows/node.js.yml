@@ -38,6 +38,14 @@ jobs:
       run: NODE_OPTIONS='--experimental-vm-modules' npx jest --runInBand
       working-directory: ./Backend
 
+    # ---- Démarrer le Backend en arrière-plan ----
+    - name: Start Backend Server
+      run: npm start &
+      working-directory: ./Backend
+
+    - name: Wait for Backend to be Ready
+      run: sleep 10  # Ajuste ce temps selon le démarrage de ton Backend
+
     # ---- Frontend ----
     - name: Setup Node.js Frontend
       uses: actions/setup-node@v4
