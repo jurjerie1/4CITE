@@ -40,11 +40,11 @@ jobs:
 
     # ---- Démarrer le Backend en arrière-plan ----
     - name: Start Backend Server
-      run: npm start &
+      run: npm run build && npm run start 
       working-directory: ./Backend
 
     - name: Wait for Backend to be Ready
-      run: sleep 10  # Ajuste ce temps selon le démarrage de ton Backend
+      run: sleep 3
 
     # ---- Frontend ----
     - name: Setup Node.js Frontend
