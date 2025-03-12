@@ -388,8 +388,9 @@ const Home = () => {
                         <form onSubmit={handleSearchSubmit}>
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Destination</label>
+                                    <label htmlFor="destination" className="block text-sm font-medium text-gray-700 mb-1">Destination</label>
                                     <input
+                                        id="destination"
                                         type="text"
                                         name="destination"
                                         placeholder="Ville, région ou hôtel"
@@ -399,8 +400,9 @@ const Home = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Arrivée</label>
+                                    <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">Arrivée</label>
                                     <input
+                                        id="startDate"
                                         type="date"
                                         name="startDate"
                                         value={searchForm.startDate}
@@ -410,8 +412,9 @@ const Home = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Départ</label>
+                                    <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-1">Départ</label>
                                     <input
+                                        id="endDate"
                                         type="date"
                                         name="endDate"
                                         value={searchForm.endDate}
@@ -421,8 +424,9 @@ const Home = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Voyageurs</label>
+                                    <label htmlFor="nbPerson" className="block text-sm font-medium text-gray-700 mb-1">Voyageurs</label>
                                     <select
+                                        id="nbPerson"
                                         name="nbPerson"
                                         value={searchForm.nbPerson}
                                         onChange={handleSearchFormChange}
@@ -576,10 +580,11 @@ const Home = () => {
 
                         <form onSubmit={handleBookingSubmit}>
                             <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">
                                     Date d'arrivée
                                 </label>
                                 <input
+                                    id="startDate"
                                     type="date"
                                     name="startDate"
                                     value={bookingForm.startDate}
@@ -591,10 +596,11 @@ const Home = () => {
                             </div>
 
                             <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-1">
                                     Date de départ
                                 </label>
                                 <input
+                                    id="endDate"
                                     type="date"
                                     name="endDate"
                                     value={bookingForm.endDate}
@@ -606,10 +612,11 @@ const Home = () => {
                             </div>
 
                             <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label htmlFor="nbPerson" className="block text-sm font-medium text-gray-700 mb-1">
                                     Nombre de personnes
                                 </label>
                                 <select
+                                    id="nbPerson"
                                     name="nbPerson"
                                     value={bookingForm.nbPerson}
                                     onChange={handleBookingFormChange}
