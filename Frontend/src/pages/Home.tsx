@@ -106,7 +106,7 @@ const Home = () => {
                 const data = await response.json();
                 setExistingBookings(data);
             } catch (err) {
-               }
+            }
         };
 
         fetchAllBookings();

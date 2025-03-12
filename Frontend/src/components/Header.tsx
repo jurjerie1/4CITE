@@ -29,9 +29,8 @@ const Header: React.FC = () => {
 
                     <nav className="hidden md:flex space-x-10">
                         <a href="/" className="font-medium hover:text-gold-500 transition-colors">Accueil</a>
-                        <a href="#" className="font-medium hover:text-gold-500 transition-colors">Réservations</a>
-                        <a href="#" className="font-medium hover:text-gold-500 transition-colors">Contact</a>
-                    </nav>
+                        <a href="#hotels-section" className="font-medium hover:text-gold-500 transition-colors">Réservations</a>
+                        </nav>
 
                     <div className="hidden md:flex items-center space-x-4">
                         {isAuthenticated ? (

@@ -451,7 +451,7 @@ const HotelManagement: React.FC<HotelManagementProps> = ({ onHotelUpdate }) => {
                                     className="bg-blue-500 text-white px-4 py-2 rounded"
                                     disabled={isSubmitting}
                                 >
-                                    {isSubmitting ? 'Modification...' : 'Modifier'}
+                                    {isSubmitting ? 'Modification...' : 'Modifiez'}
                                 </button>
                             </div>
                         </form>
