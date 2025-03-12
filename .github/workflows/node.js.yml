@@ -27,7 +27,7 @@ jobs:
         cache-dependency-path: ./Backend/package-lock.json
 
     - name: Install Dependencies Backend
-      run: npm ci --omit=dev
+      run: npm ci
       working-directory: ./Backend
 
     - name: Run Security Audit Backend
