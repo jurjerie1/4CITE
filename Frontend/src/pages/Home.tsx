@@ -322,7 +322,6 @@ const Home = () => {
 
 
         } catch (err : any) {
-            console.error('Erreur lors de la réservation:', err);
             setBookingStatus({
                 message: `${(err as Error).message || 'Une erreur est survenue'}`,
                 type: 'error'
