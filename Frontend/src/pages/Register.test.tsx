@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Login from './Login';
+import Register from './Register';
 import axios from 'axios';
 
 jest.mock('axios');
@@ -12,101 +12,106 @@ jest.mock('react-router-dom', () => ({
     BrowserRouter: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
 }));
 
-describe('Login Page', () => {
+describe('Register Page', () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        localStorage.clear();
     });
 
-    it('renders the login form', () => {
-        render(<Login />);
+    it('renders the registration form', () => {
+        render(<Register />);
+
         expect(screen.getByLabelText(/Email/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/Mot de passe/i)).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Connexion/i })).toBeInTheDocument();
+        expect(screen.getByLabelText(/Pseudo/i)).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /S'inscrire/i })).toBeInTheDocument();
     });
 
     it('updates input values when user types', () => {
-        render(<Login />);
+        render(<Register />);
+
         const emailInput = screen.getByLabelText(/Email/i);
         const passwordInput = screen.getByLabelText(/Mot de passe/i);
+        const pseudoInput = screen.getByLabelText(/Pseudo/i);
 
         fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
         fireEvent.change(passwordInput, { target: { value: 'password123' } });
+        fireEvent.change(pseudoInput, { target: { value: 'testuser' } });
 
         expect(emailInput).toHaveValue('test@example.com');
         expect(passwordInput).toHaveValue('password123');
+        expect(pseudoInput).toHaveValue('testuser');
     });
 
-    it('displays registration link', () => {
-        render(<Login />);
-        const registerLink = screen.getByText(/S'inscrire/i);
-        expect(registerLink).toBeInTheDocument();
-        expect(registerLink).toHaveAttribute('href', '/register');
+    it('displays login link', () => {
+        render(<Register />);
+
+        const loginLink = screen.getByText(/Se connecter/i);
+        expect(loginLink).toBeInTheDocument();
+        expect(loginLink).toHaveAttribute('href', '/login');
     });
 
-    it('submits the form and handles successful login', async () => {
-        const mockUser = { id: 1, name: 'User Test', email: 'test@example.com' };
-        const mockToken = 'fake-token-123';
+    it('submits the form and handles successful registration', async () => {
         const mockResponse = {
             data: {
-                message: 'Connexion réussie',
-                user: mockUser,
-                token: mockToken
+                message: 'Inscription réussie'
             }
         };
 
         mockedAxios.post.mockResolvedValueOnce(mockResponse);
 
-        render(<Login />);
+        render(<Register />);
 
         const emailInput = screen.getByLabelText(/Email/i);
         const passwordInput = screen.getByLabelText(/Mot de passe/i);
-        const submitButton = screen.getByRole('button', { name: /Connexion/i });
+        const pseudoInput = screen.getByLabelText(/Pseudo/i);
+        const submitButton = screen.getByRole('button', { name: /S'inscrire/i });
 
         fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
         fireEvent.change(passwordInput, { target: { value: 'password123' } });
+        fireEvent.change(pseudoInput, { target: { value: 'testuser' } });
         fireEvent.click(submitButton);
 
         await waitFor(() => {
             expect(mockedAxios.post).toHaveBeenCalledWith(
-                'http://localhost:3000/api/users/login',
-                { email: 'test@example.com', password: 'password123' }
+                'http://localhost:3000/api/users/register',
+                { email: 'test@example.com', password: 'password123', pseudo: 'testuser' }
             );
-            expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
-            expect(localStorage.getItem('user')).toBe(JSON.stringify(mockUser));
-            expect(localStorage.getItem('token')).toBe(mockToken);
+            expect(screen.getByText('Inscription réussie')).toBeInTheDocument();
         });
     });
 
-    it('handles unexpected errors during login', async () => {
+    it('handles unexpected errors during registration', async () => {
         mockedAxios.post.mockRejectedValueOnce(new Error('Network error'));
         mockedAxios.isAxiosError.mockReturnValueOnce(false);
 
-        render(<Login />);
+        render(<Register />);
 
         const emailInput = screen.getByLabelText(/Email/i);
         const passwordInput = screen.getByLabelText(/Mot de passe/i);
-        const submitButton = screen.getByRole('button', { name: /Connexion/i });
+        const pseudoInput = screen.getByLabelText(/Pseudo/i);
+        const submitButton = screen.getByRole('button', { name: /S'inscrire/i });
 
         fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
         fireEvent.change(passwordInput, { target: { value: 'password123' } });
+        fireEvent.change(pseudoInput, { target: { value: 'testuser' } });
         fireEvent.click(submitButton);
 
         await waitFor(() => {
-            expect(screen.getByText('Une erreur inattendue est survenue')).toBeInTheDocument();
-            expect(mockNavigate).not.toHaveBeenCalled();
+            expect(screen.getByText('An unexpected error occurred')).toBeInTheDocument();
         });
     });
 
     it('validates required fields', async () => {
-        render(<Login />);
+        render(<Register />);
 
-        const submitButton = screen.getByRole('button', { name: /Connexion/i });
+        const submitButton = screen.getByRole('button', { name: /S'inscrire/i });
         const emailInput = screen.getByLabelText(/Email/i);
         const passwordInput = screen.getByLabelText(/Mot de passe/i);
+        const pseudoInput = screen.getByLabelText(/Pseudo/i);
 
         expect(emailInput).toBeRequired();
         expect(passwordInput).toBeRequired();
+        expect(pseudoInput).toBeRequired();
 
         fireEvent.click(submitButton);
         expect(mockedAxios.post).not.toHaveBeenCalled();

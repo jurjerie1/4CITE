@@ -1,50 +1,24 @@
-# React + TypeScript + Vite
+<!DOCTYPE html>
+<html lang="fr">
+<body>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+<div class="container">
+    <h1>🚀 Frontend - 4CITE</h1>
+    <p>Bienvenue dans le projet <strong>4CITE</strong> ! Ce guide vous aidera à installer et exécuter l'application frontend en local.</p>
+    <h2>📦 Prérequis</h2>
+    <ul>
+        <li>Installer <a href="https://nodejs.org/" target="_blank">Node.js</a> (dernière version recommandée)</li>
+        <li>Installer <a href="https://www.npmjs.com/" target="_blank">npm</a> (inclus avec Node.js)</li>
+        <li>Lancer le backend <strong>4CITE</strong> (voir son README)</li>
+    </ul>
+    <h2>🚀 Installation des dépendances</h2>
+    <p>Dans le terminal, exécutez :</p>
+    <pre><code>npm install</code></pre>
+    <h2>🏃 Lancer le projet en mode développement</h2>
+    <p>Utilisez la commande :</p>
+    <pre><code>npm run dev</code></pre>
+    <p>Votre frontend sera accessible sur : <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></p>
+    <p>💡 <strong>Happy coding ! 🚀</strong></p>
+</div>
+</body>
+</html>

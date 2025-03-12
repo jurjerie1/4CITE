@@ -32,8 +32,9 @@ const Register: React.FC = () => {
                     <h2 className="text-3xl font-light text-center mb-12">Inscription</h2>
                     <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                         <div className="mb-4">
-                            <label className="block text-gray-700">Email <span className="text-red-500">*</span></label>
+                            <label htmlFor="email" className="block text-gray-700">Email <span className="text-red-500">*</span></label>
                             <input
+                                id="email"
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -42,9 +43,10 @@ const Register: React.FC = () => {
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-gray-700">Mot de passe <span
+                            <label htmlFor="password" className="block text-gray-700">Mot de passe <span
                                 className="text-red-500">*</span></label>
                             <input
+                                id="password"
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
@@ -53,8 +55,9 @@ const Register: React.FC = () => {
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-gray-700">Pseudo <span className="text-red-500">*</span></label>
+                            <label htmlFor="pseudo" className="block text-gray-700">Pseudo <span className="text-red-500">*</span></label>
                             <input
+                                id="pseudo"
                                 type="text"
                                 value={pseudo}
                                 onChange={(e) => setPseudo(e.target.value)}
