@@ -63,7 +63,7 @@ jobs:
       working-directory: ./Frontend
 
     - name: Run Tests Frontend
-      run: NODE_OPTIONS='--experimental-vm-modules' npx jest --runInBand
+      run: npm run test
       working-directory: ./Frontend
 
     # ---- Build & Deploy ----
@@ -75,9 +75,9 @@ jobs:
       run: npm run build
       working-directory: ./Frontend
 
-    - name: Build Solution Frontend
-      run: npm run build
-      working-directory: ./Frontend
+#    - name: Build Solution Frontend
+#      run: npm run build
+#      working-directory: ./Frontend
         
     - name: Deploy (Fake Deployment)
       run: echo "Deploying solution..."
