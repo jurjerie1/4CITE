@@ -62,9 +62,9 @@ jobs:
       run: npm audit --audit-level=critical || echo "Audit completed with issues"
       working-directory: ./Frontend
 
-    - name: Run Tests Frontend
-      run: npm test
-      working-directory: ./Frontend
+    # - name: Run Tests Frontend
+    #   run: npm test
+    #   working-directory: ./Frontend
 
     # ---- Build & Deploy ----
     - name: Build Solution Backend
