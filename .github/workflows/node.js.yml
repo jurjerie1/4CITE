@@ -55,7 +55,7 @@ jobs:
         cache-dependency-path: ./Frontend/package-lock.json
 
     - name: Install Dependencies Frontend
-      run: npm install
+      run: npm ci && npm install --save-dev @testing-library/jest-dom
       working-directory: ./Frontend
 
     - name: Run Security Audit Frontend
