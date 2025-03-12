@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [22.x]
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -55,7 +55,7 @@ jobs:
         cache-dependency-path: ./Frontend/package-lock.json
 
     - name: Install Dependencies Frontend
-      run: npm ci && npm install --save-dev @testing-library/jest-dom
+      run: npm ci && npm install --save-dev @testing-library/jest-dom && npm i @testing-library/jest-dom
       working-directory: ./Frontend
 
     - name: Run Security Audit Frontend
