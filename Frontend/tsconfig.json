@@ -9,17 +9,9 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "allowImportingTsExtensions": true,
-    "target": "es6",
-    "module": "commonjs",
-    "strict": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true
   },
   "include": [
     "src/**/*",
-    "custom.d.ts",
-    "cypress/**/*.ts"
-  ],
-  "exclude": ["node_modules"]
+    "custom.d.ts"
+  ]
 }

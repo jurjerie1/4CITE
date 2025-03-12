@@ -16,5 +16,5 @@ export default {
         '\\.(jpg|jpeg|png|gif|svg)$': '<rootDir>/src/__mocks__/fileMock.js',
         '\\.(css|less|scss)$': '<rootDir>/src/__mocks__/styleMock.js'
     },
-    transformIgnorePatterns: ['<rootDir>/node_modules/']
+    setupFilesAfterEnv: ['@testing-library/jest-dom']
 };
