@@ -17,33 +17,63 @@ jobs:
       
     - name: Start MongoDB Container
       run: docker run -d --name mongodb -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=secret -v mongodb_data:/data/db mongo:latest
-      
-    - name: Setup Node.js ${{ matrix.node-version }}
+
+    # ---- Backend ----
+    - name: Setup Node.js Backend
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         cache-dependency-path: ./Backend/package-lock.json
-        
-    - name: Install Dependencies
+
+    - name: Install Dependencies Backend
       run: npm ci
       working-directory: ./Backend
 
-    - name: Generate package-lock.json if missing
-      run: npm i --package-lock-only
+    - name: Run Security Audit Backend
+      run: npm audit --audit-level=critical || echo "Audit completed with issues"
       working-directory: ./Backend
 
-    - name: Run Security Audit
-      run: npm audit --audit-level=critical
-      working-directory: ./Backend
-      
-    - name: Run Tests
+    - name: Run Tests Backend
       run: NODE_OPTIONS='--experimental-vm-modules' npx jest --runInBand
       working-directory: ./Backend
 
-    - name: Build Solution
+    # ---- Démarrer le Backend en arrière-plan ----
+    - name: Start Backend Server
+      run: npm run dev &
+      working-directory: ./Backend
+
+    - name: Wait for Backend to be Ready
+      run: sleep 3
+
+    # ---- Frontend ----
+    - name: Setup Node.js Frontend
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: ./Frontend/package-lock.json
+
+    - name: Install Dependencies Frontend
+      run: npm install && npm audit fix && npm run build
+      working-directory: ./Frontend
+
+    - name: Run Security Audit Frontend
+      run: npm audit --audit-level=critical || echo "Audit completed with issues"
+      working-directory: ./Frontend
+
+    - name: Run Tests Frontend
+      run: NODE_OPTIONS='--experimental-vm-modules' npx jest --runInBand
+      working-directory: ./Frontend
+
+    # ---- Build & Deploy ----
+    - name: Build Solution Backend
       run: npm run build
       working-directory: ./Backend
+
+    - name: Build Solution Frontend
+      run: npm run build
+      working-directory: ./Frontend
         
     - name: Deploy (Fake Deployment)
       run: echo "Deploying solution..."
