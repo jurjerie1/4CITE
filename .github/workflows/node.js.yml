@@ -55,7 +55,7 @@ jobs:
         cache-dependency-path: ./Frontend/package-lock.json
 
     - name: Install Dependencies Frontend
-      run: npm install && npm audit fix && npm run build
+      run: npm install
       working-directory: ./Frontend
 
     - name: Run Security Audit Frontend
@@ -70,6 +70,10 @@ jobs:
     - name: Build Solution Backend
       run: npm run build
       working-directory: ./Backend
+
+    - name: Build Solution Frontend
+      run: npm run build
+      working-directory: ./Frontend
 
     - name: Build Solution Frontend
       run: npm run build
