@@ -15,6 +15,9 @@
 p {
 color: #000;
 }
+ul {
+color: #000;
+}
 li {
 color: #000;
 }
