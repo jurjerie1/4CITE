@@ -1,52 +1,5 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>README - Frontend 4CITE</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 40px;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-p {
-color: #000;
-}
-ul {
-color: #000;
-}
-li {
-color: #000;
-}
-        h1, h2, h3 {
-            color: #007bff;
-        }
-        code {
-            background: #eee;
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-family: "Courier New", monospace;
-        }
-        pre {
-            background: #222;
-            color: #fff;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-    </style>
-</head>
 <body>
 
 <div class="container">
