@@ -20,7 +20,7 @@ describe('User Registration and Login', () => {
         cy.get('form').contains('button', 'Connexion').click();
       } else {
         // Attendre que l'inscription soit complète
-        cy.contains('Inscription réussie', { timeout: 10000 }).should('be.visible');
+        cy.contains('Utilisateur créé avec succès', { timeout: 10000 }).should('be.visible');
 
         // Naviguer vers la page de connexion
         cy.visit('http://localhost:5173/login');
