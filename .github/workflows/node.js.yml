@@ -47,7 +47,7 @@ jobs:
         cache-dependency-path: ./Frontend/package-lock.json
 
     - name: Install Dependencies Frontend
-      run: npm ci --omit=dev
+      run: npm ci
       working-directory: ./Frontend
 
     - name: Run Security Audit Frontend
