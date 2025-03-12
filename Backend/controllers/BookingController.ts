@@ -3,10 +3,39 @@ import { Booking } from '../models/Booking';
 import { CustomRequest } from 'utils/CustomRequest';
 import BookingRepository from '../repositories/bookingRepository.ts';
 import HotelRepository from '../repositories/hotelRepository.ts';
-import { Hotel } from '../models/Hotel.ts';
+import { Hotel, IHotel } from '../models/Hotel.ts';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import {IBooking} from '../models/Booking.ts';
+//#region Multer configuration
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const bookingRepository = new BookingRepository(Booking);
 const hotelRepository = new HotelRepository(Hotel);
+
+const GetPictureList = (Booking: IBooking[]) => {
+    console.log(Booking);
+    return Booking.map(booking => {
+        console.log(booking);
+        booking = typeof booking.toObject === 'function'
+            ? booking.toObject()
+            : booking;
+        booking.hotel.picture_list = [];
+        const finalDir = path.join(__dirname, `../public/uploads/${booking.hotel._id}`);
+        if
+        (fs.existsSync(finalDir)) {
+            const files = fs.readdirSync(finalDir);
+            for (const file of files) {
+                booking.hotel.picture_list.push(`/public/${booking.hotel._id}/${file}`);
+            }
+        }
+        return booking;
+    });
+
+}
+
 export const GetAllBookings = async (req: Request, res: Response) => {
     try {
         const { limit, page, date, userName, userEmail, hotelName } = req.query;
@@ -41,7 +70,7 @@ export const GetAllBookings = async (req: Request, res: Response) => {
             hotelName ? hotelName.toString().trim() : null
         );
 
-        res.status(200).json(bookings);
+        res.status(200).json(GetPictureList(bookings));
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -51,7 +80,7 @@ export const GetAllBookingsByUser = async (req: CustomRequest, res: Response) =>
     try {
         const user = req.userData;
         const bookings = await bookingRepository.getBookingsByUser(user.userId);
-        res.status(200).json(bookings);
+        res.status(200).json(GetPictureList(bookings));
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -85,7 +114,7 @@ export const CreateBooking = async (req: CustomRequest, res: Response) => {
         });
 
         const booking = await bookingRepository.createBooking(newBooking);
-        res.status(201).json({ message: "La réservation a été créée avec succès", booking });
+        res.status(201).json({ message: "La réservation a été créée avec succès", booking : GetPictureList([booking])[0] });
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -117,7 +146,7 @@ export const UpdateBooking = async (req: CustomRequest, res: Response) => {
 
         const updatedBooking = await bookingRepository.updateBooking(id, booking);
 
-        res.status(200).json({ message: "La réservation a été mise à jour avec succès", booking: updatedBooking });
+        res.status(200).json({ message: "La réservation a été mise à jour avec succès", booking: GetPictureList([updatedBooking])[0] });
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
