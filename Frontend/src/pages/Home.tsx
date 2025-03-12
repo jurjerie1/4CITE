@@ -48,7 +48,7 @@ const Home = () => {
     const [searchPerformed, setSearchPerformed] = useState(false);
     const [existingBookings, setExistingBookings] = useState<any[]>([]);
 
-    // Format de date helper
+    // Format de date
     function formatDate(date: Date): string {
         return date.toISOString().split('T')[0];
     }
