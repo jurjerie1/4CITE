@@ -89,7 +89,6 @@ const Home = () => {
             } catch (err) {
                 setError('Erreur lors du chargement des hôtels');
                 setLoading(false);
-                console.error('Erreur:', err);
             }
         };
 
@@ -107,8 +106,7 @@ const Home = () => {
                 const data = await response.json();
                 setExistingBookings(data);
             } catch (err) {
-                console.error('Erreur lors du chargement des réservations:', err);
-            }
+               }
         };
 
         fetchAllBookings();
@@ -179,7 +177,6 @@ const Home = () => {
 
             setSearching(false);
         } catch (err) {
-            console.error('Erreur lors de la recherche d\'hôtels disponibles:', err);
             setError('Erreur lors de la recherche. Veuillez réessayer.');
             setSearching(false);
         }
@@ -229,7 +226,6 @@ const Home = () => {
 
     // Ouvrir le modal de réservation
     const handleBookNow = (hotel: HotelType) => {
-        console.log("Bouton réserver cliqué pour l'hôtel:", hotel);
         setSelectedHotelId(hotel._id);
         setSelectedHotel(hotel);
         setIsBookingModalOpen(true);
@@ -272,11 +268,6 @@ const Home = () => {
         e.preventDefault();
 
         if (!selectedHotelId) {
-            console.error("Aucun hôtel sélectionné", {
-                isModalOpen: isBookingModalOpen,
-                selectedHotel: selectedHotel,
-                selectedHotelId: selectedHotelId
-            });
             setBookingStatus({
                 message: 'Erreur: Aucun hôtel sélectionné',
                 type: 'error'
@@ -288,7 +279,6 @@ const Home = () => {
             const userToken = localStorage.getItem('token');
 
             if (!userToken) {
-                console.error("L'utilisateur n'est pas connecté");
                 setBookingStatus({
                     message: 'Vous devez être connecté pour effectuer une réservation',
                     type: 'error'
@@ -330,10 +320,11 @@ const Home = () => {
                 closeBookingModal();
             }, 2000);
 
+
         } catch (err : any) {
             console.error('Erreur lors de la réservation:', err);
             setBookingStatus({
-                message: `${err.message}`,
+                message: `${(err as Error).message || 'Une erreur est survenue'}`,
                 type: 'error'
             });
         }

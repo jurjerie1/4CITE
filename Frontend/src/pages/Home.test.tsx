@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Home from './Home';
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
 
 jest.mock('../assets/bannerChamber.jpg', () => 'banner-chamber-mock');
 jest.mock('../assets/bannerRestaurant.jpg', () => 'banner-restaurant-mock');
