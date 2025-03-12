@@ -15,23 +15,8 @@ const Login: React.FC = () => {
         try {
             const response = await axios.post('http://localhost:3000/api/users/login', {email, password});
             setMessage(response.data.message);
-
-            const userRole = response.data.user.role;
-
-            switch(userRole) {
-                case 2:
                     navigate('/dashboard');
-                    break;
-                case 1:
-                    navigate('/dashboard');
-                    break;
-                case 0:
-                default:
-                    navigate('/dashboard');
-                    break;
-            }
 
-            // Stocker les informations utilisateur dans localStorage ou sessionStorage si nécessaire
             localStorage.setItem('user', JSON.stringify(response.data.user));
             localStorage.setItem('token', response.data.token);
 
