@@ -39,5 +39,5 @@ describe('Booking Management CRUD Operations', () => {
         cy.get('@bookingCard').contains('Supprimer').scrollIntoView().click({ force: true });
 
         cy.on('window:confirm', () => true);
-        });
+    });
 });

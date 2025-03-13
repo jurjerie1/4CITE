@@ -320,7 +320,8 @@ const Home = () => {
                 closeBookingModal();
             }, 2000);
 
-        } catch (err) {
+
+        } catch (err : any) {
             setBookingStatus({
                 message: `${(err as Error).message || 'Une erreur est survenue'}`,
                 type: 'error'
