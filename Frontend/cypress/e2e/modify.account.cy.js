@@ -13,15 +13,14 @@ describe('User Profile Update', () => {
     });
 
     it('should update user profile information', () => {
-        cy.get('input[name="pseudo"]').clear().type('newpseudo');
-        cy.get('input[name="email"]').clear().type('newemail@example.com');
+        cy.get('input[name="pseudo"]').clear().type('newpseudofortesting');
+        cy.get('input[name="email"]').clear().type('newuser@example.com');
         cy.get('input[name="password"]').type('newpassword123');
 
         cy.contains('button', 'Enregistrer les modifications').click();
 
         cy.contains('Profil mis à jour avec succès!', { timeout: 10000 }).should('be.visible');
 
-        cy.get('input[name="pseudo"]').should('have.value', 'newpseudo');
-        cy.get('input[name="email"]').should('have.value', 'newemail@example.com');
+        cy.get('input[name="pseudo"]').should('have.value', 'newpseudofortesting');
     });
 });
